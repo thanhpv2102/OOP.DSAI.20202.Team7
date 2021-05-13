@@ -44,23 +44,26 @@ public class TestMotion {
 			System.out.println("Enter object mass:");
 			double mass = scanner.nextDouble();
 			Cube cube = new Cube(mass, sizeLength, force, surface);
-			start(cube);
+			start(cube, force, surface);
 		} else if (typeObj == 2) {
 			System.out.println("Enter cyclinder radius:");
 			double radius = scanner.nextDouble();
 			System.out.println("Enter object mass:");
 			double mass = scanner.nextDouble();
 			Cylinder cyclinder = new Cylinder(mass, radius, force, surface);
-			start(cyclinder);
+			start(cyclinder, force, surface);
 		}
 		
 	}
 	
-	public static void start(ActedObject obj) {
+	public static void start(ActedObject obj, ActorForce force, Surface surface) {
 		if (obj instanceof Cube) {
 			Cube cube = (Cube) obj;
 			double t = 0;
 			while (t < 10) {
+				if (t > 5) {
+					force.setMagnitude(1000.0);
+				}
 				cube.proceed(0.001);
 				System.out.println("Time (s): " + t);
 				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
@@ -72,6 +75,9 @@ public class TestMotion {
 			Cylinder cyclinder = (Cylinder) obj;
 			double t = 0;
 			while (t < 10) {
+				if (t > 5) {
+					force.setMagnitude(1000.0);
+				}
 				cyclinder.proceed(0.001);
 				System.out.println("Time (s): " + t);
 				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
