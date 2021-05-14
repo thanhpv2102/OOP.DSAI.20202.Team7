@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.shape.*?>
@@ -9,11 +10,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="654.0" prefWidth="1203.0" style="-fx-background-color: #191A21;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
+<Pane prefHeight="650.0" prefWidth="1200.0" style="-fx-background-color: #191A21;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
    <children>
-      <Button fx:id="myButton" layoutX="48.0" layoutY="129.0" mnemonicParsing="false" onAction="#showDateTime" opacity="0.0" text="Show Date Time" />
-      <TextField fx:id="myTextField" layoutX="48.0" layoutY="66.0" opacity="0.0" prefHeight="31.0" prefWidth="298.0" />
-      <Pane layoutX="871.0" layoutY="82.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <ImageView fx:id="bg1" fitHeight="925.0" fitWidth="1653.0" layoutX="-18.0" layoutY="-460.0" pickOnBounds="true" preserveRatio="false">
+         <image>
+            <Image url="@../image/background.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="bg2" fitHeight="925.0" fitWidth="1653.0" layoutX="1635.0" layoutY="-460.0" pickOnBounds="true" preserveRatio="false">
+         <image>
+            <Image url="@../image/background.png" />
+         </image>
+      </ImageView>
+      <Pane layoutX="871.0" layoutY="96.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <CheckBox layoutX="32.0" layoutY="33.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="165.0" text="Forces" textFill="#8be9fd">
                <font>
@@ -54,11 +63,12 @@
             </Text>
          </children>
       </Pane>
-      <Slider layoutX="433.0" layoutY="532.0" max="300.0" min="-300.0" prefHeight="89.0" prefWidth="337.0" showTickLabels="true" showTickMarks="true" />
+      <Slider fx:id="forceSlider" layoutX="433.0" layoutY="532.0" max="300.0" min="-300.0" prefHeight="89.0" prefWidth="337.0" showTickLabels="true" showTickMarks="true" />
       <Text fill="#8be9fd" layoutX="504.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Applied Force">
          <font>
             <Font size="32.0" />
          </font>
       </Text>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="263.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
    </children>
-</AnchorPane>
+</Pane>
