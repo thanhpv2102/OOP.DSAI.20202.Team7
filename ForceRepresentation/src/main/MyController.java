@@ -52,20 +52,15 @@ public class MyController implements Initializable {
 		parallelTransition = new ParallelTransition(translateTransition, translateTransition2);
 		parallelTransition.setCycleCount(Animation.INDEFINITE);
 		
-		parallelTransition.play();
-		setBackgroundTransitionRate(1000);
-		
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				// TODO Auto-generated method stub
-				System.out.println(arg2);
+				setBackgroundTransitionRate((int) (500000 / Math.abs(arg2.floatValue())));
 			}
 		});
 	}
 	
 	public static void setBackgroundTransitionRate(int speed) {
-		parallelTransition.pause();
 		translateTransition.setDuration(Duration.millis(speed));
 		translateTransition2.setDuration(Duration.millis(speed));
 		parallelTransition.playFromStart();
