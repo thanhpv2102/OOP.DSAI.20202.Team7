@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -34,8 +35,10 @@ import javafx.util.Duration;
 
 public class MyController implements Initializable {
 
-	private ActorForce force = new ActorForce(0.0, 0.0);
+	private ActorForce force = new ActorForce(0, 0, 0);
 	private Surface surface = new Surface(0.25, 0.25);
+	private Cube cube;
+	private Cylinder cylinder;
 
 	@FXML
     private Slider staticSlider;
@@ -68,13 +71,13 @@ public class MyController implements Initializable {
 	private Rectangle bg_cube;
 
 	@FXML
-	private Circle bg_cyclinder;
+	private Circle bg_cylinder;
 
 	@FXML
 	private RadioButton radio_cube;
 
 	@FXML
-	private RadioButton radio_cyclinder;
+	private RadioButton radio_cylinder;
 
 	ToggleGroup group = new ToggleGroup();
 
@@ -101,7 +104,7 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+	
 		//Alter static friction coef with staticSlider
 	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
@@ -110,11 +113,10 @@ public class MyController implements Initializable {
 			if (staticSlider.getValue() >= kineticSlider.getValue()) {
 				staticSlider.adjustValue(kineticSlider.getValue());
 			}
-			surface.setStaticFrictionCoef((double)staticSlider.getValue());
+			surface.setStaticFrictionCoef((double) staticSlider.getValue());
 //			System.out.println("static:" + surface.getStaticFrictionCoef());
 		}
 	   });
-	   
 	   
 	   //Alter kinetic friction coef with kineticSlider
 	   kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -125,7 +127,7 @@ public class MyController implements Initializable {
 			if (kineticSlider.getValue() <= staticSlider.getValue()) {
 				kineticSlider.adjustValue(staticSlider.getValue());
 			}
-			surface.setKineticFrictionCoef((double)kineticSlider.getValue());
+			surface.setKineticFrictionCoef((double) kineticSlider.getValue());
 //			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
 		}
 		   
@@ -133,7 +135,7 @@ public class MyController implements Initializable {
 	   
 		//initialize toggle group
 		radio_cube.setToggleGroup(group);
-		radio_cyclinder.setToggleGroup(group);
+		radio_cylinder.setToggleGroup(group);
 
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
@@ -144,7 +146,7 @@ public class MyController implements Initializable {
 					input_sizeLength.setVisible(true);
 					txt_radius.setVisible(false);
 					txt_sizeLength.setVisible(true);
-					bg_cyclinder.setVisible(false);
+					bg_cylinder.setVisible(false);
 					bg_cube.setVisible(true);
 					horizontal_line.setVisible(false);
 					vertical_line.setVisible(false);
@@ -153,7 +155,7 @@ public class MyController implements Initializable {
 					input_sizeLength.setVisible(false);
 					txt_radius.setVisible(true);
 					txt_sizeLength.setVisible(false);
-					bg_cyclinder.setVisible(true);
+					bg_cylinder.setVisible(true);
 					bg_cube.setVisible(false);
 					horizontal_line.setVisible(true);
 					vertical_line.setVisible(true);
@@ -218,6 +220,38 @@ public class MyController implements Initializable {
 				}
 			}
 		});
+	}
+	
+	public static void start(ActedObject obj, ActorForce force, Surface surface) {
+		if (obj instanceof Cube) {
+			Cube cube = (Cube) obj;
+			double t = 0;
+			while (t < 10) {
+				if (t > 5) {
+					force.setMagnitude(1000.0);
+				}
+				cube.proceed(0.001);
+				System.out.println("Time (s): " + t);
+				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
+				System.out.println("Total force magnitude: " + cube.getSumForce());
+				System.out.println("--------------------------------------");
+				t += 0.001;
+			}
+		} else if (obj instanceof Cylinder) {
+			Cylinder cyclinder = (Cylinder) obj;
+			double t = 0;
+			while (t < 10) {
+				if (t > 5) {
+					force.setMagnitude(1000.0);
+				}
+				cyclinder.proceed(0.001);
+				System.out.println("Time (s): " + t);
+				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
+				System.out.println("Total force magnitude: " + cyclinder.getSumForce());
+				System.out.println("--------------------------------------");
+				t += 0.001;
+			}
+		}
 	}
 
 	public static void setBackgroundTransitionRate(double speed) {	
