@@ -64,6 +64,7 @@ public class Cylinder extends ActedObject {
 	}
 	
 	public void proceed(double deltaT) {
+		this.validateSpeedThreshold();
 		this.updateFrictionalForce();
 		this.updateAcceleration();
 		this.updateAngularAcceleration();

@@ -35,6 +35,7 @@ public class Cube extends ActedObject {
 	}
 	
 	public void proceed(double deltaT) {
+		this.validateSpeedThreshold();
 		this.updateFrictionalForce();
 		this.updateAcceleration();
 		this.updatePosition(deltaT);
