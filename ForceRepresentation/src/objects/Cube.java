@@ -11,6 +11,11 @@ public class Cube extends ActedObject {
 	}
 	
 	
+	public void setSideLength(double sideLength) {
+		this.sideLength = sideLength;
+	}
+
+
 	public Cube(double mass, double sideLength, ActorForce actorForce, Surface surface) {
 		super(mass, 0, sideLength/2, actorForce, surface);
 		this.sideLength = sideLength;
@@ -20,8 +25,7 @@ public class Cube extends ActedObject {
 	
 	public void updateFrictionalForce() {
 		double magnitude;
-		if ( Math.abs(this.actorForce.getMagnitude()) <= Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() 
-			&& this.getVelocity() == 0) {
+		if ( Math.abs(this.actorForce.getMagnitude()) <= Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() ) {
 			magnitude = Math.abs(this.actorForce.getMagnitude());
 		} else {
 			magnitude = Math.abs(this.normalForce.getMagnitude() * this.surface.getKineticFrictionCoef());
@@ -35,7 +39,6 @@ public class Cube extends ActedObject {
 	}
 	
 	public void proceed(double deltaT) {
-		this.validateSpeedThreshold();
 		this.updateFrictionalForce();
 		this.updateAcceleration();
 		this.updatePosition(deltaT);

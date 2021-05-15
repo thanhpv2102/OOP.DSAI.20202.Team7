@@ -5,15 +5,14 @@ import force.*;
 public abstract class ActedObject {
 
 	private double mass;
-	protected GravitationalForce gravitationalForce;
-	protected NormalForce normalForce;
-	protected ActorForce actorForce;
-	protected FrictionalForce frictionalForce;
-	protected Surface surface;
+	public GravitationalForce gravitationalForce;
+	public NormalForce normalForce;
+	public ActorForce actorForce;
+	public FrictionalForce frictionalForce;
+	public Surface surface;
 	private double x;
 	private double y;
 	private double velocity;
-	private final double MAX_SPEED = 20;
 	private double acceleration;
 
 	
@@ -22,6 +21,8 @@ public abstract class ActedObject {
 	}
 	public void setMass(double mass) {
 		this.mass = mass;
+		this.gravitationalForce = new GravitationalForce(this.x, this.y, this.mass*10);
+		this.normalForce = new NormalForce(this.x,this.y,this.mass * 10);
 	}
 	public double getVelocity() {
 		return velocity;
@@ -35,7 +36,8 @@ public abstract class ActedObject {
 	public double getY() {
 		return y;
 	}
-
+	
+	
 	
 	public ActedObject(double mass, double x, double y, ActorForce actorForce, Surface surface) {
 		//(x,y) is the coordinates of the center of the object
@@ -45,6 +47,7 @@ public abstract class ActedObject {
 		this.x = x;
 		this.y = y;
 		this.gravitationalForce = new GravitationalForce(this.x, this.y, this.mass*10);
+		System.out.println(this.gravitationalForce.getMagnitude());
 		this.normalForce = new NormalForce(this.x, this.y, this.gravitationalForce.getMagnitude());
 		this.frictionalForce = new FrictionalForce(this.x, 0, 0);
 		this.actorForce = actorForce;
@@ -52,17 +55,23 @@ public abstract class ActedObject {
 	}
 	
 	
+	public double getGravitationalForceMagnitude() {
+		return this.gravitationalForce.getMagnitude();
+	}
+	public double  getNormalForceMagnitude() {
+		return this.normalForce.getMagnitude();
+	}
+	public double getActorForceMagnitude() {
+		return this.actorForce.getMagnitude();
+	}
+	public double getFrictionalForceMagnitude() {
+		return this.frictionalForce.getMagnitude();
+	}
+	
+	
 	public double getSumForce() {
 		//Base direction: Right
 		return this.actorForce.getMagnitude() - this.frictionalForce.getMagnitude();
-	}
-	
-	//If the speed of the object surpasses a threshold, then we have to stop applying force on it
-	//otherwise the speed can reach infinity at some point
-	public void validateSpeedThreshold() {
-		if ( Math.abs(this.velocity) >= this.MAX_SPEED ) {
-			this.actorForce.setMagnitude(0);
-		}
 	}
 	
 	//Method to update frictional force
@@ -92,5 +101,16 @@ public abstract class ActedObject {
 	
 	//Method to update the state of the object after a time interval deltaT
 	public abstract void proceed(double deltaT);
+	
+	public void setSurface(Surface surface) {
+		this.surface = surface;
+	}
+	public void setFrictionalForce(FrictionalForce frictionalForce) {
+		this.frictionalForce = frictionalForce;
+	}
+	
+	
+	
+	
 	
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.shape.*?>
@@ -10,41 +10,33 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane prefHeight="650.0" prefWidth="1200.0" style="-fx-background-color: #191A21;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
+<AnchorPane prefHeight="654.0" prefWidth="1203.0" style="-fx-background-color: #191A21;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
    <children>
-      <ImageView fx:id="bg1" fitHeight="925.0" fitWidth="1653.0" layoutX="-18.0" layoutY="-460.0" pickOnBounds="true" preserveRatio="false">
-         <image>
-            <Image url="@../image/background.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="bg2" fitHeight="925.0" fitWidth="1653.0" layoutX="1635.0" layoutY="-460.0" pickOnBounds="true" preserveRatio="false">
-         <image>
-            <Image url="@../image/background.png" />
-         </image>
-      </ImageView>
-      <Pane layoutX="870.0" layoutY="23.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <Button fx:id="myButton" layoutX="48.0" layoutY="129.0" mnemonicParsing="false" onAction="#showDateTime" opacity="0.0" text="Show Date Time" />
+      <TextField fx:id="myTextField" layoutX="48.0" layoutY="66.0" opacity="0.0" prefHeight="31.0" prefWidth="298.0" />
+      <Pane layoutX="869.0" layoutY="88.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
-            <CheckBox layoutX="32.0" layoutY="33.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="165.0" text="Forces" textFill="#8be9fd">
+            <CheckBox fx:id="forcesBox" layoutX="32.0" layoutY="33.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="165.0" text="Forces" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </CheckBox>
-            <CheckBox layoutX="32.0" layoutY="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="173.0" text="Sum of Forces" textFill="#8be9fd">
+            <CheckBox fx:id="sumForcesBox" layoutX="32.0" layoutY="70.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="173.0" text="Sum of Forces" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </CheckBox>
-            <CheckBox layoutX="32.0" layoutY="109.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="165.0" text="Values" textFill="#8be9fd">
+            <CheckBox fx:id="accelerationBox" layoutX="36.0" layoutY="199.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="165.0" text="Acceleration" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </CheckBox>
-            <CheckBox layoutX="32.0" layoutY="149.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="137.0" text="Mass" textFill="#8be9fd">
+            <CheckBox fx:id="speedBox" layoutX="32.0" layoutY="149.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="137.0" text="Speed" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </CheckBox>
-            <CheckBox layoutX="32.0" layoutY="185.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="137.0" text="Speed" textFill="#8be9fd">
+            <CheckBox fx:id="massBox" layoutX="32.0" layoutY="107.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="137.0" text="Mass" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
@@ -54,36 +46,93 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <Slider fx:id="staticSlider" blockIncrement="0.1" layoutX="82.0" layoutY="266.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
-            <Slider fx:id="kineticSlider" blockIncrement="0.1" layoutX="82.0" layoutY="343.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
-            <Text fill="#8be9fd" layoutX="48.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kinetic Friction Coefficient" wrappingWidth="219.47265625">
+            <Slider fx:id="staticSlider" blockIncrement="0.1" layoutX="82.0" layoutY="277.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Slider fx:id="kineticSlider" blockIncrement="0.1" layoutX="82.0" layoutY="344.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Text fill="#8be9fd" layoutX="42.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kinetic Friction Coefficient" wrappingWidth="219.47265625">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
          </children>
       </Pane>
-      <Slider fx:id="forceSlider" layoutX="433.0" layoutY="532.0" max="300.0" min="-300.0" prefHeight="89.0" prefWidth="337.0" showTickLabels="true" showTickMarks="true" />
+      <Slider fx:id="forceSlider" layoutX="433.0" layoutY="535.0" max="300.0" min="-300.0" prefHeight="89.0" prefWidth="337.0" showTickLabels="true" showTickMarks="true" />
       <Text fill="#8be9fd" layoutX="504.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Applied Force">
          <font>
             <Font size="32.0" />
          </font>
       </Text>
-      <Rectangle fx:id="bg_cube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="263.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Pane layoutX="20.0" layoutY="23.0" prefHeight="170.0" prefWidth="372.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <Text fx:id="massBar" fill="#c4ba43" layoutX="7.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mass" wrappingWidth="206.7568359375">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="sumForceBar" fill="#c4ba43" layoutX="6.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sum of Forces" wrappingWidth="272.7568359375">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="accelerationBar" fill="#c4ba43" layoutY="422.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Acceleration: " wrappingWidth="371.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="speedBar" fill="#c4ba43" layoutX="-1.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Speed" wrappingWidth="286.7568359375">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="normalForceBar" fill="#c4ba43" layoutX="4.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Normal Force: " wrappingWidth="236.125">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Pane layoutX="346.0" layoutY="8.0" prefHeight="304.0" prefWidth="371.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
-            <RadioButton fx:id="radio_cube" layoutX="23.0" layoutY="71.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="79.0" selected="true" text="Cube" textFill="#8be9fd" />
-            <RadioButton fx:id="radio_cyclinder" layoutX="23.0" layoutY="98.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="109.0" text="Cyclinder" textFill="#8be9fd" />
-            <TextField fx:id="input_mass" layoutX="193.0" layoutY="54.0" prefHeight="31.0" prefWidth="137.0" text="50.0" />
-            <TextField fx:id="input_sizeLength" layoutX="195.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="200.0" />
-            <TextField fx:id="input_radius" layoutX="193.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="100.0" visible="false" />
-            <Text fill="#8be9fd" layoutX="195.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mass (kg):" />
-            <Text fx:id="txt_radius" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Radius (pixels):" visible="false" />
-            <Text fx:id="txt_sizeLength" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size length (pixels):" />
+            <TextField fx:id="massField" layoutX="112.0" layoutY="47.0" onAction="#massInput" prefHeight="27.0" prefWidth="137.0" />
+            <Label layoutX="165.0" layoutY="14.0" text="Mass" textFill="#8be9fd">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="45.0" layoutY="170.0" text="Please input Side length (&lt;100)" textFill="#8be9fd">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="sideLengthField" layoutX="109.0" layoutY="212.0" onAction="#sideLengthInput" prefHeight="27.0" prefWidth="137.0" />
+            <Label fx:id="massOutput" layoutX="133.0" layoutY="102.0" text="Mass outcome" textFill="#8be9fd">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="sideLengthOutput" layoutX="94.0" layoutY="263.0" text="Side length outcome" textFill="#8be9fd">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
-      <Circle fx:id="bg_cyclinder" fill="#66e389e1" layoutX="602.0" layoutY="363.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-      <Line fx:id="horizontal_line" endX="100.0" layoutX="600.0" layoutY="363.0" startX="-100.0" visible="false"/>
-      <Line fx:id="vertical_line" endX="0.0" endY="-100.0" layoutX="600.0" layoutY="363.0" startX="0.0" startY="100.0" visible="false"/>
+      <Label text="Label" />
+      <Label text="Label" />
+      <Text fx:id="frictionalForceBar" fill="#c4ba43" layoutX="4.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Frictional Force" wrappingWidth="236.125">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="forceBar2" fill="#c4ba43" layoutX="4.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="236.125">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="gravitationalForceBar" fill="#c4ba43" layoutX="4.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gravitational Force: " wrappingWidth="236.125">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="actorForceBar" fill="#c4ba43" layoutX="4.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actor Force" wrappingWidth="236.125">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
-</Pane>
+</AnchorPane>

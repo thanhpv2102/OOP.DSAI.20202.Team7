@@ -68,6 +68,9 @@ public class TestMotion {
 				System.out.println("Time (s): " + t);
 				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
 				System.out.println("Total force magnitude: " + cube.getSumForce());
+				System.out.println("Velocity: " + cube.getVelocity());
+				System.out.println("frictional force: " + cube.getFrictionalForceMagnitude());
+
 				System.out.println("--------------------------------------");
 				t += 0.001;
 			}
