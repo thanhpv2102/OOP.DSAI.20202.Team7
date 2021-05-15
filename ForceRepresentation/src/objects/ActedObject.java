@@ -13,6 +13,7 @@ public abstract class ActedObject {
 	private double x;
 	private double y;
 	private double velocity;
+	private final double MAX_SPEED = 20;
 	private double acceleration;
 
 	
@@ -54,6 +55,14 @@ public abstract class ActedObject {
 	public double getSumForce() {
 		//Base direction: Right
 		return this.actorForce.getMagnitude() - this.frictionalForce.getMagnitude();
+	}
+	
+	//If the speed of the object surpasses a threshold, then we have to stop applying force on it
+	//otherwise the speed can reach infinity at some point
+	public void validateSpeedThreshold() {
+		if ( Math.abs(this.velocity) >= this.MAX_SPEED ) {
+			this.actorForce.setMagnitude(0);
+		}
 	}
 	
 	//Method to update frictional force
