@@ -44,10 +44,10 @@ public class MyController implements Initializable {
 	private Cylinder cylinder;
 
 	@FXML
-    private Slider staticSlider;
-   
-    @FXML
-    private Slider kineticSlider;
+	private Slider staticSlider;
+
+	@FXML
+	private Slider kineticSlider;
 
 	private int BACKGROUND_WIDTH = 1653;
 	private static ParallelTransition parallelTransition;
@@ -104,81 +104,81 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Line vertical_line;
-	
+
 	@FXML
 	private static TextArea sumForcesDisplay;
-	
+
 	@FXML
 	private static TextArea gravitationalForceDisplay;
-	
+
 	@FXML
 	private static TextArea normalForceDisplay;
-	
+
 	@FXML
 	private static TextArea actorForceDisplay;
-	
+
 	@FXML
 	private static TextArea frictionalForceDisplay;
-	
+
 	@FXML
 	private static TextArea massDisplay;
-	
+
 	@FXML
 	private static TextArea speedDisplay;
-	
+
 	@FXML
 	private static TextArea accelerationDisplay;
-	
+
 	@FXML
 	private static CheckBox forcesBox;
-	   
+
 	@FXML
 	private static CheckBox sumForcesBox;
-	   
+
 	@FXML
 	private static CheckBox valuesBox;
-	   
+
 	@FXML
 	private static CheckBox massBox;
-	   
+
 	@FXML
 	private static CheckBox speedBox;
-	   
-	 @FXML
-	 private static CheckBox accelerationBox;
+
+	@FXML
+	private static CheckBox accelerationBox;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	
+
 		//Alter static friction coef with staticSlider
-	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
-		@Override
-		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-			if (staticSlider.getValue() >= kineticSlider.getValue()) {
-				staticSlider.adjustValue(kineticSlider.getValue());
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				if (staticSlider.getValue() >= kineticSlider.getValue()) {
+					staticSlider.adjustValue(kineticSlider.getValue());
+				}
+				surface.setStaticFrictionCoef((double) staticSlider.getValue());
+				//			System.out.println("static:" + surface.getStaticFrictionCoef());
 			}
-			surface.setStaticFrictionCoef((double) staticSlider.getValue());
-//			System.out.println("static:" + surface.getStaticFrictionCoef());
-		}
-	   });
-	   
-	   //Alter kinetic friction coef with kineticSlider
-	   kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		});
 
-		@Override
-		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-			// TODO Auto-generated method stub
-			if (kineticSlider.getValue() <= staticSlider.getValue()) {
-				kineticSlider.adjustValue(staticSlider.getValue());
+		//Alter kinetic friction coef with kineticSlider
+		kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				// TODO Auto-generated method stub
+				if (kineticSlider.getValue() <= staticSlider.getValue()) {
+					kineticSlider.adjustValue(staticSlider.getValue());
+				}
+				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
+				//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
 			}
-			surface.setKineticFrictionCoef((double) kineticSlider.getValue());
-//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
-		}
-		   
-	   });
-	   
+
+		});
+
 		//initialize toggle group
 		radio_cube.setToggleGroup(group);
 		radio_cylinder.setToggleGroup(group);
@@ -224,13 +224,13 @@ public class MyController implements Initializable {
 		rotateTransition1.setByAngle(720);
 		rotateTransition2 = new RotateTransition(Duration.millis(10000), vertical_line); 
 		rotateTransition2.setByAngle(720);
-		
+
 		rotateTransition1.setInterpolator(Interpolator.LINEAR);
 		rotateTransition2.setInterpolator(Interpolator.LINEAR);
 
 		parallelTransition = new ParallelTransition(bg_trans1, bg_trans2, rotateTransition1, rotateTransition2);
 		parallelTransition.setCycleCount(Animation.INDEFINITE);
-		
+
 		//base animations BACKWARD
 		bg_trans1Back = new TranslateTransition(Duration.millis(10000), bg1);
 		bg_trans1Back.setFromX(-1 * BACKGROUND_WIDTH);
@@ -246,7 +246,7 @@ public class MyController implements Initializable {
 		rotateTransition1Back.setByAngle(-720);
 		rotateTransition2Back = new RotateTransition(Duration.millis(10000), vertical_line); 
 		rotateTransition2Back.setByAngle(-720);
-		
+
 		rotateTransition1Back.setInterpolator(Interpolator.LINEAR);
 		rotateTransition2Back.setInterpolator(Interpolator.LINEAR);
 
@@ -267,14 +267,14 @@ public class MyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public static void display(ActedObject object) {
 		if (valuesBox.isSelected() == true) {
 			gravitationalForceDisplay.setVisible(true);
 			normalForceDisplay.setVisible(true);
 			frictionalForceDisplay.setVisible(true);
 			actorForceDisplay.setVisible(true);
-			
+
 			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ));
 			normalForceDisplay.setText(Double.toString( object.getNormalForceMagnitude() ));
 			frictionalForceDisplay.setText(Double.toString( object.getFrictionalForceMagnitude() ));
@@ -285,14 +285,14 @@ public class MyController implements Initializable {
 			frictionalForceDisplay.setVisible(false);
 			actorForceDisplay.setVisible(false);
 		}
-		
+
 		if (sumForcesBox.isSelected() == true) {
 			sumForcesDisplay.setVisible(true);
 			sumForcesDisplay.setText(Double.toString(object.getSumForce()) );
 		} else {
 			sumForcesDisplay.setVisible(false);
 		}
-		
+
 		if (massBox.isSelected() == true) {
 			massDisplay.setVisible(true);
 			massDisplay.setText(Double.toString(object.getMass()) );
@@ -316,41 +316,6 @@ public class MyController implements Initializable {
 
 		}
 	}
-	
-	
-	public static void start(ActedObject obj, ActorForce force, Surface surface) {
-		if (obj instanceof Cube) {
-			Cube cube = (Cube) obj;
-			double t = 0;
-			while (t < 10) {
-				if (t > 5) {
-					force.setMagnitude(1000.0);
-				}
-				cube.proceed(0.001);
-				System.out.println("Time (s): " + t);
-				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
-				System.out.println("Total force magnitude: " + cube.getSumForce());
-				System.out.println("--------------------------------------");
-				display(obj);
-				t += 0.001;
-			}
-		} else if (obj instanceof Cylinder) {
-			Cylinder cyclinder = (Cylinder) obj;
-			double t = 0;
-			while (t < 10) {
-				if (t > 5) {
-					force.setMagnitude(1000.0);
-				}
-				cyclinder.proceed(0.001);
-				System.out.println("Time (s): " + t);
-				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
-				System.out.println("Total force magnitude: " + cyclinder.getSumForce());
-				System.out.println("--------------------------------------");
-				display(obj);
-				t += 0.001;
-			}
-		}
-	}
 
 	public static void setBackgroundTransitionRate(double speed) {	
 		//slowly speed up animation from old speed to new speed
@@ -364,7 +329,7 @@ public class MyController implements Initializable {
 		}	
 		System.out.println(parallelTransition.getRate());	
 	}
-	
+
 	public static void setBackgroundTransitionRateBack(double speed) {	
 		//slowly speed up animation from old speed to new speed
 		parallelTransition.pause();
