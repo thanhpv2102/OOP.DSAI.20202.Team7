@@ -84,6 +84,8 @@ public class MyController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		
+		//initialize toggle group
 		radio_cube.setToggleGroup(group);
 		radio_cyclinder.setToggleGroup(group);
 
@@ -113,6 +115,7 @@ public class MyController implements Initializable {
 			}
 		});
 
+		//base animations
 		bg_trans1 = new TranslateTransition(Duration.millis(10000), bg1);
 		bg_trans1.setFromX(0);
 		bg_trans1.setToX(-1 * BACKGROUND_WIDTH);
@@ -134,6 +137,7 @@ public class MyController implements Initializable {
 		parallelTransition = new ParallelTransition(bg_trans1, bg_trans2, rotateTransition1, rotateTransition2);
 		parallelTransition.setCycleCount(Animation.INDEFINITE);
 
+		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
