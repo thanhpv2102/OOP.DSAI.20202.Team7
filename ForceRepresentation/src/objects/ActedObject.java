@@ -51,6 +51,9 @@ public abstract class ActedObject {
 		this.surface = surface;
 	}
 	
+	
+	
+	
 	public double getGravitationalForceMagnitude() {
 		return gravitationalForce.getMagnitude();
 	}
@@ -63,7 +66,6 @@ public abstract class ActedObject {
 	public double getFrictionalForceMagnitude() {
 		return frictionalForce.getMagnitude();
 	}
-	
 	public double getSumForce() {
 		//Base direction: Right
 		return this.actorForce.getMagnitude() - this.frictionalForce.getMagnitude();
