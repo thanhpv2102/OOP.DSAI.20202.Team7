@@ -49,6 +49,11 @@ public class MyController implements Initializable {
 	private static RotateTransition rotateTransition2;
 	private static TranslateTransition bg_trans1;
 	private static TranslateTransition bg_trans2;
+	private static ParallelTransition parallelTransitionBack;
+	private static RotateTransition rotateTransition1Back;
+	private static RotateTransition rotateTransition2Back;
+	private static TranslateTransition bg_trans1Back;
+	private static TranslateTransition bg_trans2Back;
 
 	@FXML
 	private Slider forceSlider;
@@ -125,8 +130,7 @@ public class MyController implements Initializable {
 		}
 		   
 	   });
-
-		
+	   
 		//initialize toggle group
 		radio_cube.setToggleGroup(group);
 		radio_cyclinder.setToggleGroup(group);
@@ -157,7 +161,7 @@ public class MyController implements Initializable {
 			}
 		});
 
-		//base animations
+		//base animations FORWARD
 		bg_trans1 = new TranslateTransition(Duration.millis(10000), bg1);
 		bg_trans1.setFromX(0);
 		bg_trans1.setToX(-1 * BACKGROUND_WIDTH);
@@ -178,6 +182,28 @@ public class MyController implements Initializable {
 
 		parallelTransition = new ParallelTransition(bg_trans1, bg_trans2, rotateTransition1, rotateTransition2);
 		parallelTransition.setCycleCount(Animation.INDEFINITE);
+		
+		//base animations BACKWARD
+		bg_trans1Back = new TranslateTransition(Duration.millis(10000), bg1);
+		bg_trans1Back.setFromX(-1 * BACKGROUND_WIDTH);
+		bg_trans1Back.setToX(0);
+		bg_trans1Back.setInterpolator(Interpolator.LINEAR);
+
+		bg_trans2Back = new TranslateTransition(Duration.millis(10000), bg2);
+		bg_trans2Back.setFromX(-1 * BACKGROUND_WIDTH);
+		bg_trans2Back.setToX(0);
+		bg_trans2Back.setInterpolator(Interpolator.LINEAR);
+
+		rotateTransition1Back = new RotateTransition(Duration.millis(10000), horizontal_line); 
+		rotateTransition1Back.setByAngle(-720);
+		rotateTransition2Back = new RotateTransition(Duration.millis(10000), vertical_line); 
+		rotateTransition2Back.setByAngle(-720);
+		
+		rotateTransition1Back.setInterpolator(Interpolator.LINEAR);
+		rotateTransition2Back.setInterpolator(Interpolator.LINEAR);
+
+		parallelTransitionBack = new ParallelTransition(bg_trans1Back, bg_trans2Back, rotateTransition1Back, rotateTransition2Back);
+		parallelTransitionBack.setCycleCount(Animation.INDEFINITE);
 
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -185,13 +211,18 @@ public class MyController implements Initializable {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
 				System.out.println("force:" + force.getMagnitude());
-				setBackgroundTransitionRate(Math.abs(arg2.doubleValue()));
+				if (force.getMagnitude() < 0) {
+					setBackgroundTransitionRateBack(Math.abs(arg2.doubleValue()));
+				} else {
+					setBackgroundTransitionRate(Math.abs(arg2.doubleValue()));
+				}
 			}
 		});
 	}
 
 	public static void setBackgroundTransitionRate(double speed) {	
 		//slowly speed up animation from old speed to new speed
+		parallelTransitionBack.pause();
 		float i = (float) parallelTransition.getRate();
 		while (i <= speed) {
 			parallelTransition.pause();
@@ -200,6 +231,19 @@ public class MyController implements Initializable {
 			i += 0.1;
 		}	
 		System.out.println(parallelTransition.getRate());	
+	}
+	
+	public static void setBackgroundTransitionRateBack(double speed) {	
+		//slowly speed up animation from old speed to new speed
+		parallelTransition.pause();
+		float i = (float) parallelTransitionBack.getRate();
+		while (i <= speed) {
+			parallelTransitionBack.pause();
+			parallelTransitionBack.setRate(i / 30);
+			parallelTransitionBack.play();
+			i += 0.1;
+		}	
+		System.out.println(parallelTransitionBack.getRate());	
 	}
 
 }
