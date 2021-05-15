@@ -183,6 +183,8 @@ public class MyController implements Initializable {
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				force.setMagnitude(forceSlider.getValue());
+				System.out.println("force:" + force.getMagnitude());
 				setBackgroundTransitionRate(Math.abs(arg2.doubleValue()));
 			}
 		});
