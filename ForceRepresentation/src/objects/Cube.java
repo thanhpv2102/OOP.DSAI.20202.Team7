@@ -20,7 +20,8 @@ public class Cube extends ActedObject {
 	
 	public void updateFrictionalForce() {
 		double magnitude;
-		if ( Math.abs(this.actorForce.getMagnitude()) <= Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() ) {
+		if ( Math.abs(this.actorForce.getMagnitude()) <= Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() 
+			&& this.getVelocity() == 0) {
 			magnitude = Math.abs(this.actorForce.getMagnitude());
 		} else {
 			magnitude = Math.abs(this.normalForce.getMagnitude() * this.surface.getKineticFrictionCoef());
@@ -34,6 +35,7 @@ public class Cube extends ActedObject {
 	}
 	
 	public void proceed(double deltaT) {
+		this.validateSpeedThreshold();
 		this.updateFrictionalForce();
 		this.updateAcceleration();
 		this.updatePosition(deltaT);

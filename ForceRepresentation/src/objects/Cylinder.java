@@ -36,7 +36,8 @@ public class Cylinder extends ActedObject {
 	
 	public void updateFrictionalForce() {
 		double magnitude;
-		if ( Math.abs(this.actorForce.getMagnitude()) <= 3 * Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() ) {
+		if ( Math.abs(this.actorForce.getMagnitude()) <= 3 * Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() 
+			&& this.getVelocity() == 0) {
 			magnitude = Math.abs(this.actorForce.getMagnitude()) / 3;
 		} else {
 			magnitude = Math.abs(this.normalForce.getMagnitude() * this.surface.getKineticFrictionCoef());
@@ -63,6 +64,7 @@ public class Cylinder extends ActedObject {
 	}
 	
 	public void proceed(double deltaT) {
+		this.validateSpeedThreshold();
 		this.updateFrictionalForce();
 		this.updateAcceleration();
 		this.updateAngularAcceleration();
