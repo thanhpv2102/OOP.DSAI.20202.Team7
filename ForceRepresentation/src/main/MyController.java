@@ -1,4 +1,8 @@
 package main;
+
+import force.ActorForce;
+import objects.*;
+
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +33,15 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class MyController implements Initializable {
+
+	private ActorForce force = new ActorForce(0.0, 0.0);
+	private Surface surface = new Surface(0.25, 0.25);
+
+	@FXML
+    private Slider staticSlider;
+   
+    @FXML
+    private Slider kineticSlider;
 
 	private int BACKGROUND_WIDTH = 1653;
 	private static ParallelTransition parallelTransition;
@@ -83,6 +96,35 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		//Alter static friction coef with staticSlider
+	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+		@Override
+		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+			if (staticSlider.getValue() >= kineticSlider.getValue()) {
+				staticSlider.adjustValue(kineticSlider.getValue());
+			}
+			surface.setStaticFrictionCoef((double)staticSlider.getValue());
+//			System.out.println("static:" + surface.getStaticFrictionCoef());
+		}
+	   });
+	   
+	   
+	   //Alter kinetic friction coef with kineticSlider
+	   kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+		@Override
+		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+			// TODO Auto-generated method stub
+			if (kineticSlider.getValue() <= staticSlider.getValue()) {
+				kineticSlider.adjustValue(staticSlider.getValue());
+			}
+			surface.setKineticFrictionCoef((double)kineticSlider.getValue());
+//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
+		}
+		   
+	   });
 
 		
 		//initialize toggle group

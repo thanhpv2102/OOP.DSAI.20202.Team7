@@ -54,9 +54,9 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <Slider blockIncrement="0.1" layoutX="82.0" layoutY="266.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
-            <Slider blockIncrement="0.1" layoutX="82.0" layoutY="343.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
-            <Text fill="#8be9fd" layoutX="42.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kinetic Friction Coefficient" wrappingWidth="219.47265625">
+            <Slider fx:id="staticSlider" blockIncrement="0.1" layoutX="82.0" layoutY="266.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Slider fx:id="kineticSlider" blockIncrement="0.1" layoutX="82.0" layoutY="343.0" majorTickUnit="0.1" max="0.5" minorTickCount="1" showTickLabels="true" showTickMarks="true" value="0.25" />
+            <Text fill="#8be9fd" layoutX="48.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kinetic Friction Coefficient" wrappingWidth="219.47265625">
                <font>
                   <Font size="18.0" />
                </font>
