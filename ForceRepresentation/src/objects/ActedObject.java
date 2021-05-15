@@ -13,7 +13,7 @@ public abstract class ActedObject {
 	private double x;
 	private double y;
 	private double velocity;
-	private final double MAX_SPEED = 20;
+	private final double MAX_SPEED = 200;
 	private double acceleration;
 
 	

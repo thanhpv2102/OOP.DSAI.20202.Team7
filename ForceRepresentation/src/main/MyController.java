@@ -104,6 +104,9 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
+		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 	
 		//Alter static friction coef with staticSlider
 	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -214,70 +217,68 @@ public class MyController implements Initializable {
 				force.setMagnitude(forceSlider.getValue());
 				System.out.println("force:" + force.getMagnitude());
 				if (force.getMagnitude() < 0) {
-					setBackgroundTransitionRateBack(Math.abs(arg2.doubleValue()));
+					if (radio_cube.isSelected()) {
+						while (force.getMagnitude() != 0) {
+							cube.proceed(1);
+							setBackgroundTransitionRateBack(cube.getVelocity());
+							if ((int) cube.getVelocity() == 0) {
+								continue;	
+							} else {
+								System.out.println("velo:" + cube.getVelocity());	
+							}
+						}
+					} else {
+						while (force.getMagnitude() != 0) {
+							cylinder.proceed(1);
+							setBackgroundTransitionRateBack(cylinder.getVelocity());
+							if ((int) cylinder.getVelocity() == 0) {
+								continue;	
+							} else {
+								System.out.println("velo:" + cylinder.getVelocity());	
+							}
+						}
+					}
 				} else {
-					setBackgroundTransitionRate(Math.abs(arg2.doubleValue()));
+					if (radio_cube.isSelected()) {
+						while (force.getMagnitude() != 0) {
+							cube.proceed(1);
+							setBackgroundTransitionRate(cube.getVelocity());
+							if ((int) cube.getVelocity() == 0) {
+								continue;	
+							} else {
+								System.out.println("velo:" + cube.getVelocity());	
+							}
+						}
+					} else {
+						while (force.getMagnitude() != 0) {
+							cylinder.proceed(1);
+							setBackgroundTransitionRate(cylinder.getVelocity());
+							if ((int) cylinder.getVelocity() == 0) {
+								continue;	
+							} else {
+								System.out.println("velo:" + cylinder.getVelocity());	
+							}
+						}
+					}
 				}
 			}
 		});
-	}
-	
-	public static void start(ActedObject obj, ActorForce force, Surface surface) {
-		if (obj instanceof Cube) {
-			Cube cube = (Cube) obj;
-			double t = 0;
-			while (t < 10) {
-				if (t > 5) {
-					force.setMagnitude(1000.0);
-				}
-				cube.proceed(0.001);
-				System.out.println("Time (s): " + t);
-				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
-				System.out.println("Total force magnitude: " + cube.getSumForce());
-				System.out.println("--------------------------------------");
-				t += 0.001;
-			}
-		} else if (obj instanceof Cylinder) {
-			Cylinder cyclinder = (Cylinder) obj;
-			double t = 0;
-			while (t < 10) {
-				if (t > 5) {
-					force.setMagnitude(1000.0);
-				}
-				cyclinder.proceed(0.001);
-				System.out.println("Time (s): " + t);
-				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
-				System.out.println("Total force magnitude: " + cyclinder.getSumForce());
-				System.out.println("--------------------------------------");
-				t += 0.001;
-			}
-		}
 	}
 
 	public static void setBackgroundTransitionRate(double speed) {	
 		//slowly speed up animation from old speed to new speed
 		parallelTransitionBack.pause();
-		float i = (float) parallelTransition.getRate();
-		while (i <= speed) {
-			parallelTransition.pause();
-			parallelTransition.setRate(i / 30);
-			parallelTransition.play();
-			i += 0.1;
-		}	
-		System.out.println(parallelTransition.getRate());	
+		parallelTransition.pause();
+		parallelTransition.setRate(speed);
+		parallelTransition.play();
 	}
 	
 	public static void setBackgroundTransitionRateBack(double speed) {	
 		//slowly speed up animation from old speed to new speed
 		parallelTransition.pause();
-		float i = (float) parallelTransitionBack.getRate();
-		while (i <= speed) {
-			parallelTransitionBack.pause();
-			parallelTransitionBack.setRate(i / 30);
-			parallelTransitionBack.play();
-			i += 0.1;
-		}	
-		System.out.println(parallelTransitionBack.getRate());	
+		parallelTransitionBack.pause();
+		parallelTransitionBack.setRate(speed);
+		parallelTransitionBack.play();
 	}
 
 }
