@@ -55,15 +55,21 @@ public class MyController implements Initializable {
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				setBackgroundTransitionRate((int) (500000 / Math.abs(arg2.floatValue())));
+				setBackgroundTransitionRate(Math.abs(arg2.floatValue()));
 			}
 		});
 	}
 	
-	public static void setBackgroundTransitionRate(int speed) {
-		translateTransition.setDuration(Duration.millis(speed));
-		translateTransition2.setDuration(Duration.millis(speed));
-		parallelTransition.playFromStart();
+	public static void setBackgroundTransitionRate(float speed) {	
+		//slowly speed up animation from old speed to new speed
+		float i = (float) parallelTransition.getRate();
+		while (i <= speed) {
+			parallelTransition.pause();
+			parallelTransition.setRate(i / 30);
+			parallelTransition.play();
+			i += 0.1;
+		}	
+		System.out.println(parallelTransition.getRate());	
 	}
 
 }
