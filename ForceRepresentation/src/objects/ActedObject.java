@@ -65,6 +65,20 @@ public abstract class ActedObject {
 	}
 	
 	
+	
+	
+	public double getGravitationalForceMagnitude() {
+		return gravitationalForce.getMagnitude();
+	}
+	public double getNormalForceMagnitude() {
+		return normalForce.getMagnitude();
+	}
+	public double getActorForceMagnitude() {
+		return actorForce.getMagnitude();
+	}
+	public double getFrictionalForceMagnitude() {
+		return frictionalForce.getMagnitude();
+	}
 	public double getSumForce() {
 		//Base direction: Right
 		return this.actorForce.getMagnitude() - this.frictionalForce.getMagnitude();

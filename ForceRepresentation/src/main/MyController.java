@@ -21,8 +21,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -101,6 +104,49 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Line vertical_line;
+	
+	@FXML
+	private static TextArea sumForcesDisplay;
+	
+	@FXML
+	private static TextArea gravitationalForceDisplay;
+	
+	@FXML
+	private static TextArea normalForceDisplay;
+	
+	@FXML
+	private static TextArea actorForceDisplay;
+	
+	@FXML
+	private static TextArea frictionalForceDisplay;
+	
+	@FXML
+	private static TextArea massDisplay;
+	
+	@FXML
+	private static TextArea speedDisplay;
+	
+	@FXML
+	private static TextArea accelerationDisplay;
+	
+	@FXML
+	private static CheckBox forcesBox;
+	   
+	@FXML
+	private static CheckBox sumForcesBox;
+	   
+	@FXML
+	private static CheckBox valuesBox;
+	   
+	@FXML
+	private static CheckBox massBox;
+	   
+	@FXML
+	private static CheckBox speedBox;
+	   
+	 @FXML
+	 private static CheckBox accelerationBox;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -222,6 +268,56 @@ public class MyController implements Initializable {
 		});
 	}
 	
+	public static void display(ActedObject object) {
+		if (valuesBox.isSelected() == true) {
+			gravitationalForceDisplay.setVisible(true);
+			normalForceDisplay.setVisible(true);
+			frictionalForceDisplay.setVisible(true);
+			actorForceDisplay.setVisible(true);
+			
+			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ));
+			normalForceDisplay.setText(Double.toString( object.getNormalForceMagnitude() ));
+			frictionalForceDisplay.setText(Double.toString( object.getFrictionalForceMagnitude() ));
+			actorForceDisplay.setText(Double.toString( object.getActorForceMagnitude() ));
+		} else {
+			gravitationalForceDisplay.setVisible(false);
+			normalForceDisplay.setVisible(false);
+			frictionalForceDisplay.setVisible(false);
+			actorForceDisplay.setVisible(false);
+		}
+		
+		if (sumForcesBox.isSelected() == true) {
+			sumForcesDisplay.setVisible(true);
+			sumForcesDisplay.setText(Double.toString(object.getSumForce()) );
+		} else {
+			sumForcesDisplay.setVisible(false);
+		}
+		
+		if (massBox.isSelected() == true) {
+			massDisplay.setVisible(true);
+			massDisplay.setText(Double.toString(object.getMass()) );
+		} else {
+			massDisplay.setVisible(false);
+
+		}
+		if (speedBox.isSelected() == true) {
+			speedDisplay.setVisible(true);
+			speedDisplay.setText(Double.toString( object.getVelocity() ));
+		} else {
+			speedDisplay.setVisible(false);
+
+		}
+		if (accelerationBox.isSelected() == true) {
+			accelerationDisplay.setVisible(true);
+			accelerationDisplay.setText(Double.toString(object.getAcceleration() )); 
+
+		} else {
+			accelerationDisplay.setVisible(false);
+
+		}
+	}
+	
+	
 	public static void start(ActedObject obj, ActorForce force, Surface surface) {
 		if (obj instanceof Cube) {
 			Cube cube = (Cube) obj;
@@ -235,6 +331,7 @@ public class MyController implements Initializable {
 				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
 				System.out.println("Total force magnitude: " + cube.getSumForce());
 				System.out.println("--------------------------------------");
+				display(obj);
 				t += 0.001;
 			}
 		} else if (obj instanceof Cylinder) {
@@ -249,6 +346,7 @@ public class MyController implements Initializable {
 				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
 				System.out.println("Total force magnitude: " + cyclinder.getSumForce());
 				System.out.println("--------------------------------------");
+				display(obj);
 				t += 0.001;
 			}
 		}
