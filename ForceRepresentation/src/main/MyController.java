@@ -218,46 +218,42 @@ public class MyController implements Initializable {
 				System.out.println("force:" + force.getMagnitude());
 				if (force.getMagnitude() < 0) {
 					if (radio_cube.isSelected()) {
-						while ((int) cube.getSumForce() != 0) {
+						while (cube.getVelocity() != 0) {
 							cube.proceed(1);
-							//setBackgroundTransitionRateBack(cube.getVelocity());
-							if ((int) cube.getVelocity() == 0) {
-								continue;	
-							} else {
-								System.out.println("velo:" + cube.getVelocity());	
-							}
+							//setBackgroundTransitionRate(cube.getVelocity());
+							System.out.println("velo:" + (int) cube.getVelocity());	
 						}
 					} else {
-						while ((int) cylinder.getSumForce() != 0) {
+						while (cylinder.getVelocity() != 0) {
 							cylinder.proceed(1);
-							//setBackgroundTransitionRateBack(cylinder.getVelocity());
-							if ((int) cylinder.getVelocity() == 0) {
-								continue;	
-							} else {
-								System.out.println("velo:" + cylinder.getVelocity());	
-							}
+							//setBackgroundTransitionRate(cube.getVelocity());
+							System.out.println("velo:" + (int) cylinder.getVelocity());	
 						}
 					}
 				} else {
 					if (radio_cube.isSelected()) {
-						while ((int) cube.getSumForce() != 0) {
+						int count = 0;
+						while (force.getMagnitude() != 0 && count <= 50) {
 							cube.proceed(1);
 							//setBackgroundTransitionRate(cube.getVelocity());
 							if ((int) cube.getVelocity() == 0) {
-								continue;	
+								break;
 							} else {
-								System.out.println("velo:" + cube.getVelocity());	
+								System.out.println("velo:" + (int) cube.getVelocity());	
 							}
+							count++;
+						}
+						while ((int) cube.getVelocity() != 0 && count <= 50) {
+							cube.proceed(1);
+							//setBackgroundTransitionRate(cube.getVelocity());
+							System.out.println("velo:" + (int) cube.getVelocity());	
+							count++;
 						}
 					} else {
-						while ((int) cylinder.getSumForce() != 0) {
+						while (cylinder.getVelocity() != 0) {
 							cylinder.proceed(1);
-							//setBackgroundTransitionRate(cylinder.getVelocity());
-							if ((int) cylinder.getVelocity() == 0) {
-								continue;	
-							} else {
-								System.out.println("velo:" + cylinder.getVelocity());	
-							}
+							//setBackgroundTransitionRate(cube.getVelocity());
+							System.out.println("velo:" + (int) cylinder.getVelocity());	
 						}
 					}
 				}
