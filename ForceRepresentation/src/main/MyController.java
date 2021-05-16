@@ -11,10 +11,15 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -37,26 +42,17 @@ public class MyController implements Initializable {
 
 	private ActorForce force = new ActorForce(0, 0, 0);
 	private Surface surface = new Surface(0.25, 0.25);
+	private final LongProperty lastUpdateAnimation = new SimpleLongProperty(0);
 	private Cube cube;
 	private Cylinder cylinder;
 
 	@FXML
-    private Slider staticSlider;
-   
-    @FXML
-    private Slider kineticSlider;
+	private Slider staticSlider;
+
+	@FXML
+	private Slider kineticSlider;
 
 	private int BACKGROUND_WIDTH = 1653;
-	private static ParallelTransition parallelTransition;
-	private static RotateTransition rotateTransition1;
-	private static RotateTransition rotateTransition2;
-	private static TranslateTransition bg_trans1;
-	private static TranslateTransition bg_trans2;
-	private static ParallelTransition parallelTransitionBack;
-	private static RotateTransition rotateTransition1Back;
-	private static RotateTransition rotateTransition2Back;
-	private static TranslateTransition bg_trans1Back;
-	private static TranslateTransition bg_trans2Back;
 
 	@FXML
 	private Slider forceSlider;
@@ -104,38 +100,38 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
 		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
-	
+
 		//Alter static friction coef with staticSlider
-	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
-		@Override
-		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-			if (staticSlider.getValue() >= kineticSlider.getValue()) {
-				staticSlider.adjustValue(kineticSlider.getValue());
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				if (staticSlider.getValue() >= kineticSlider.getValue()) {
+					staticSlider.adjustValue(kineticSlider.getValue());
+				}
+				surface.setStaticFrictionCoef((double) staticSlider.getValue());
+				//			System.out.println("static:" + surface.getStaticFrictionCoef());
 			}
-			surface.setStaticFrictionCoef((double) staticSlider.getValue());
-//			System.out.println("static:" + surface.getStaticFrictionCoef());
-		}
-	   });
-	   
-	   //Alter kinetic friction coef with kineticSlider
-	   kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		});
 
-		@Override
-		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-			// TODO Auto-generated method stub
-			if (kineticSlider.getValue() <= staticSlider.getValue()) {
-				kineticSlider.adjustValue(staticSlider.getValue());
+		//Alter kinetic friction coef with kineticSlider
+		kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				// TODO Auto-generated method stub
+				if (kineticSlider.getValue() <= staticSlider.getValue()) {
+					kineticSlider.adjustValue(staticSlider.getValue());
+				}
+				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
+				//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
 			}
-			surface.setKineticFrictionCoef((double) kineticSlider.getValue());
-//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
-		}
-		   
-	   });
-	   
+
+		});
+
 		//initialize toggle group
 		radio_cube.setToggleGroup(group);
 		radio_cylinder.setToggleGroup(group);
@@ -166,127 +162,65 @@ public class MyController implements Initializable {
 			}
 		});
 
-		//base animations FORWARD
-		bg_trans1 = new TranslateTransition(Duration.millis(10000), bg1);
-		bg_trans1.setFromX(0);
-		bg_trans1.setToX(-1 * BACKGROUND_WIDTH);
-		bg_trans1.setInterpolator(Interpolator.LINEAR);
-
-		bg_trans2 = new TranslateTransition(Duration.millis(10000), bg2);
-		bg_trans2.setFromX(0);
-		bg_trans2.setToX(-1 * BACKGROUND_WIDTH);
-		bg_trans2.setInterpolator(Interpolator.LINEAR);
-
-		rotateTransition1 = new RotateTransition(Duration.millis(10000), horizontal_line); 
-		rotateTransition1.setByAngle(720);
-		rotateTransition2 = new RotateTransition(Duration.millis(10000), vertical_line); 
-		rotateTransition2.setByAngle(720);
-		
-		rotateTransition1.setInterpolator(Interpolator.LINEAR);
-		rotateTransition2.setInterpolator(Interpolator.LINEAR);
-
-		parallelTransition = new ParallelTransition(bg_trans1, bg_trans2, rotateTransition1, rotateTransition2);
-		parallelTransition.setCycleCount(Animation.INDEFINITE);
-		
-		//base animations BACKWARD
-		bg_trans1Back = new TranslateTransition(Duration.millis(10000), bg1);
-		bg_trans1Back.setFromX(-1 * BACKGROUND_WIDTH);
-		bg_trans1Back.setToX(0);
-		bg_trans1Back.setInterpolator(Interpolator.LINEAR);
-
-		bg_trans2Back = new TranslateTransition(Duration.millis(10000), bg2);
-		bg_trans2Back.setFromX(-1 * BACKGROUND_WIDTH);
-		bg_trans2Back.setToX(0);
-		bg_trans2Back.setInterpolator(Interpolator.LINEAR);
-
-		rotateTransition1Back = new RotateTransition(Duration.millis(10000), horizontal_line); 
-		rotateTransition1Back.setByAngle(-720);
-		rotateTransition2Back = new RotateTransition(Duration.millis(10000), vertical_line); 
-		rotateTransition2Back.setByAngle(-720);
-		
-		rotateTransition1Back.setInterpolator(Interpolator.LINEAR);
-		rotateTransition2Back.setInterpolator(Interpolator.LINEAR);
-
-		parallelTransitionBack = new ParallelTransition(bg_trans1Back, bg_trans2Back, rotateTransition1Back, rotateTransition2Back);
-		parallelTransitionBack.setCycleCount(Animation.INDEFINITE);
-
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
-				System.out.println("force:" + force.getMagnitude());
-				if (force.getMagnitude() < 0) {
-					if (radio_cube.isSelected()) {
-						while (cube.getVelocity() != 0) {
-							cube.proceed(1);
-							//setBackgroundTransitionRate(cube.getVelocity());
-							System.out.println("velo:" + (int) cube.getVelocity());	
-						}
-					} else {
-						while (cylinder.getVelocity() != 0) {
-							cylinder.proceed(1);
-							//setBackgroundTransitionRate(cube.getVelocity());
-							System.out.println("velo:" + (int) cylinder.getVelocity());	
-						}
-					}
-				} else {
-					if (radio_cube.isSelected()) {
-						while (force.getMagnitude() != 0) {
-							cube.proceed(1);
-							if ((int) cube.getVelocity() == 0) {
-								break;
-							} else {
-								try {
-									Thread.sleep(100);
-									setBackgroundTransitionRate(cube.getVelocity());
-									//System.out.println("velo:" + (int) cube.getVelocity());
-								} catch (InterruptedException e) {
-
-								}
-							}
-						}
-						while ((int) cube.getVelocity() != 0) {
-							cube.proceed(1);	
-							if (cube.getVelocity() <= 0) {
-								break;
-							} else {
-								try {
-									Thread.sleep(100);
-									setBackgroundTransitionRate(cube.getVelocity());
-									//System.out.println("velo:" + (int) cube.getVelocity());	
-								} catch (InterruptedException e) {
-
-								}
-							}
-						}
-					} else {
-						while (cylinder.getVelocity() != 0) {
-							cylinder.proceed(1);
-							//setBackgroundTransitionRate(cube.getVelocity());
-							System.out.println("velo:" + (int) cylinder.getVelocity());	
-						}
-					}
-				}
+				AnimationTimer parallaxAnimation = new ParallaxAnimation();
+				parallaxAnimation.start();
 			}
 		});
 	}
 
-	public static void setBackgroundTransitionRate(double speed) {	
-		//slowly speed up animation from old speed to new speed
-		parallelTransitionBack.pause();
-		parallelTransition.pause();
-		parallelTransition.setRate(speed);
-		parallelTransition.play();
-		System.out.println("rate" + parallelTransition.getRate());
+	private class ParallaxAnimation extends AnimationTimer {
+		@Override
+		public void handle(long now) {
+			if (lastUpdateAnimation.get() > 0) {
+				long elastedNanoSecond = now - lastUpdateAnimation.get();
+				// to do
+				if (bg_cube.isVisible()) {
+					updateTransition(cube, elastedNanoSecond);
+				} else if (bg_cylinder.isVisible()) {
+					updateTransition(cylinder, elastedNanoSecond);
+				}
+			}
+			lastUpdateAnimation.set(now);
+		}
 	}
-	
-	public static void setBackgroundTransitionRateBack(double speed) {	
-		//slowly speed up animation from old speed to new speed
-		parallelTransition.pause();
-		parallelTransitionBack.pause();
-		parallelTransitionBack.setRate(speed);
-		parallelTransitionBack.play();
+
+	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
+		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
+		double old_x;
+		if (obj instanceof Cube) {
+			old_x = cube.getX();
+			cube.proceed(elastedSecond);
+			if (bg1.getX() - (cube.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
+				bg1.setX(0);
+				bg2.setX(0);
+			} else if (bg1.getX() - (cube.getX() - old_x)*50 > 0) {
+				bg1.setX(-BACKGROUND_WIDTH);
+				bg2.setX(-BACKGROUND_WIDTH);
+			} else {
+				bg1.setX(bg1.getX() - (cube.getX() - old_x)*50);
+				bg2.setX(bg2.getX() - (cube.getX() - old_x)*50);
+			}
+		} else {
+			old_x = cylinder.getX();
+			cylinder.proceed(elastedSecond);
+			if (bg1.getX() - (cylinder.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
+				bg1.setX(0);
+				bg2.setX(0);
+			} else if (bg1.getX() - (cylinder.getX() - old_x)*50 > 0) {
+				bg1.setX(-BACKGROUND_WIDTH);
+				bg2.setX(-BACKGROUND_WIDTH);
+			} else {
+				bg1.setX(bg1.getX() - (cylinder.getX() - old_x)*50);
+				bg2.setX(bg2.getX() - (cylinder.getX() - old_x)*50);
+			}
+			horizontal_line.setRotate(horizontal_line.getRotate() + (cylinder.getX() - old_x)*25);
+			vertical_line.setRotate(vertical_line.getRotate() + (cylinder.getX() - old_x)*25);
+		}
 	}
 
 }
