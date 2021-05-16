@@ -211,7 +211,7 @@ public class MyController implements Initializable {
 		parallelTransitionBack.setCycleCount(Animation.INDEFINITE);
 
 		//force slider
-		forceSlider.valueProperty().addListener(new ChangeListener<Number>() {
+		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
@@ -232,22 +232,33 @@ public class MyController implements Initializable {
 					}
 				} else {
 					if (radio_cube.isSelected()) {
-						int count = 0;
-						while (force.getMagnitude() != 0 && count <= 50) {
+						while (force.getMagnitude() != 0) {
 							cube.proceed(1);
-							//setBackgroundTransitionRate(cube.getVelocity());
 							if ((int) cube.getVelocity() == 0) {
 								break;
 							} else {
-								System.out.println("velo:" + (int) cube.getVelocity());	
+								try {
+									Thread.sleep(100);
+									setBackgroundTransitionRate(cube.getVelocity());
+									//System.out.println("velo:" + (int) cube.getVelocity());
+								} catch (InterruptedException e) {
+
+								}
 							}
-							count++;
 						}
-						while ((int) cube.getVelocity() != 0 && count <= 50) {
-							cube.proceed(1);
-							//setBackgroundTransitionRate(cube.getVelocity());
-							System.out.println("velo:" + (int) cube.getVelocity());	
-							count++;
+						while ((int) cube.getVelocity() != 0) {
+							cube.proceed(1);	
+							if (cube.getVelocity() <= 0) {
+								break;
+							} else {
+								try {
+									Thread.sleep(100);
+									setBackgroundTransitionRate(cube.getVelocity());
+									//System.out.println("velo:" + (int) cube.getVelocity());	
+								} catch (InterruptedException e) {
+
+								}
+							}
 						}
 					} else {
 						while (cylinder.getVelocity() != 0) {
@@ -267,6 +278,7 @@ public class MyController implements Initializable {
 		parallelTransition.pause();
 		parallelTransition.setRate(speed);
 		parallelTransition.play();
+		System.out.println("rate" + parallelTransition.getRate());
 	}
 	
 	public static void setBackgroundTransitionRateBack(double speed) {	
