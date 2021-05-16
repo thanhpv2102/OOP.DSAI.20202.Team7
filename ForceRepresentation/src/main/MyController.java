@@ -218,7 +218,7 @@ public class MyController implements Initializable {
 				System.out.println("force:" + force.getMagnitude());
 				if (force.getMagnitude() < 0) {
 					if (radio_cube.isSelected()) {
-						while ((int) cube.getSumForce() != 0 && (int) force.getMagnitude() != 0) {
+						while ((int) cube.getSumForce() != 0) {
 							cube.proceed(1);
 							//setBackgroundTransitionRateBack(cube.getVelocity());
 							if ((int) cube.getVelocity() == 0) {
@@ -228,7 +228,7 @@ public class MyController implements Initializable {
 							}
 						}
 					} else {
-						while ((int) cylinder.getSumForce() != 0 && (int) force.getMagnitude() != 0) {
+						while ((int) cylinder.getSumForce() != 0) {
 							cylinder.proceed(1);
 							//setBackgroundTransitionRateBack(cylinder.getVelocity());
 							if ((int) cylinder.getVelocity() == 0) {
@@ -240,7 +240,7 @@ public class MyController implements Initializable {
 					}
 				} else {
 					if (radio_cube.isSelected()) {
-						while ((int) cube.getSumForce() != 0 && (int) force.getMagnitude() != 0) {
+						while ((int) cube.getSumForce() != 0) {
 							cube.proceed(1);
 							//setBackgroundTransitionRate(cube.getVelocity());
 							if ((int) cube.getVelocity() == 0) {
@@ -250,7 +250,7 @@ public class MyController implements Initializable {
 							}
 						}
 					} else {
-						while ((int) cylinder.getSumForce() != 0 && (int) force.getMagnitude() != 0) {
+						while ((int) cylinder.getSumForce() != 0) {
 							cylinder.proceed(1);
 							//setBackgroundTransitionRate(cylinder.getVelocity());
 							if ((int) cylinder.getVelocity() == 0) {
