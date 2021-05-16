@@ -30,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -45,6 +46,9 @@ public class MyController implements Initializable {
 	
 	private double mass;
 	private double sideLength;
+	
+	private boolean cubeChosen = false;
+	private boolean cylinderChosen = false; 
 	@FXML
     private Slider staticSlider;
    
@@ -148,6 +152,13 @@ public class MyController implements Initializable {
 	   
 	 @FXML
 	 private  CheckBox accelerationBox;
+	 
+	 @FXML 
+	 private Rectangle choiceCube;
+	 
+	 @FXML 
+	 private Circle choiceCylinder;
+	 
 	
 
 
@@ -156,8 +167,8 @@ public class MyController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		//Alter static friction coef with staticSlider
 	   massDisplay.setVisible(false);
-	   
-	   
+	   bg_cube.setVisible(false);
+	   bg_cylinder.setVisible(false);
 	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
 		@Override
@@ -188,7 +199,7 @@ public class MyController implements Initializable {
 	   });
 	   
 		//initialize toggle group
-		radio_cube.setToggleGroup(group);
+		/* radio_cube.setToggleGroup(group);
 		radio_cylinder.setToggleGroup(group);
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
@@ -214,7 +225,7 @@ public class MyController implements Initializable {
 					vertical_line.setVisible(true);
 				}
 			}
-		});
+		}); */
 
 		//base animations FORWARD
 		bg_trans1 = new TranslateTransition(Duration.millis(10000), bg1);
@@ -283,6 +294,70 @@ public class MyController implements Initializable {
 		} catch(Exception e) {
 			input_mass.setText("Please enter a number for the mass!");
 		}
+	}
+	
+	
+	
+	public void cubeDragged(MouseEvent event) {
+	    choiceCube.setTranslateX(event.getX() + choiceCube.getTranslateX() );
+	    choiceCube.setTranslateY(event.getY() + choiceCube.getTranslateY() );
+
+		
+	}
+	
+	public void cubeReleased(MouseEvent event) {
+		if ( choiceCube.getTranslateY() < ( 400 - choiceCube.getLayoutY()) )   {
+			cylinderChosen = false;
+			cubeChosen = true;
+			bg_cylinder.setVisible(false);
+			bg_cube.setVisible(true);
+			choiceCube.setTranslateX(0);
+			choiceCube.setTranslateY(0);
+			choiceCube.setVisible(false);
+		} else {
+			choiceCube.setTranslateX(0);
+			choiceCube.setTranslateY(0);
+			}	
+		if (cubeChosen == true) {
+			choiceCylinder.setVisible( true);
+			choiceCube.setVisible(false);
+		}
+		if (cylinderChosen == true) {
+			choiceCube.setVisible( true);
+			choiceCylinder.setVisible( false);
+		}
+		}
+	
+	
+	public void cylinderDragged(MouseEvent event) {
+	    choiceCylinder.setTranslateX(event.getX() + choiceCylinder.getTranslateX() );
+	    choiceCylinder.setTranslateY(event.getY() + choiceCylinder.getTranslateY() );
+	}
+	
+	public void cylinderReleased(MouseEvent event) {
+		if ( choiceCylinder.getTranslateY() < ( 400 - choiceCylinder.getLayoutY()) )   {
+			cylinderChosen = true;
+			cubeChosen = false;	
+			bg_cube.setVisible(false);
+			bg_cylinder.setVisible(true);
+			horizontal_line.setVisible(true);
+			vertical_line.setVisible(true);
+		}
+		choiceCylinder.setTranslateX(0);
+		choiceCylinder.setTranslateY(0);
+		if (cubeChosen == true) {
+			choiceCylinder.setVisible( true);
+			choiceCube.setVisible(false);
+		}
+		if (cylinderChosen == true) {
+			choiceCube.setVisible( true);
+			choiceCylinder.setVisible( false);
+		}
+	}
+		
+
+	
+	public void handleDragOver(MouseEvent event) {
 	}
 	
 	
