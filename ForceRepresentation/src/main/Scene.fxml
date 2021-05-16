@@ -12,7 +12,7 @@
 
 <Pane prefHeight="724.0" prefWidth="1219.0" style="-fx-background-color: #191A21;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
    <children>
-      <ImageView fx:id="bg1" fitHeight="925.0" fitWidth="1653.0" layoutX="-29.0" layoutY="-462.0" pickOnBounds="true" preserveRatio="false">
+      <ImageView fx:id="bg1" fitHeight="925.0" fitWidth="1653.0" layoutX="-29.0" layoutY="-462.0" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="false">
          <image>
             <Image url="@../image/background.png" />
          </image>
@@ -148,5 +148,17 @@
             <Font size="18.0" />
          </font>
       </TextField>
+      <Circle fx:id="choiceCylinder" fill="#64e388" layoutX="277.0" layoutY="584.0" onMouseDragged="#cylinderDragged" onMouseReleased="#cylinderReleased" radius="59.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle fx:id="choiceCube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="107.0" layoutX="58.0" layoutY="530.0" onMouseDragged="#cubeDragged" onMouseReleased="#cubeReleased" stroke="BLACK" strokeType="INSIDE" width="109.0" />
+      <Label layoutX="71.0" layoutY="659.0" text="Cube" textFill="#8be9fd">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="238.0" layoutY="659.0" text="Cylinder" textFill="#8be9fd">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
