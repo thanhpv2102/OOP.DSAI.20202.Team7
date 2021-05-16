@@ -52,8 +52,6 @@ public abstract class ActedObject {
 	}
 	
 	
-	
-	
 	public double getGravitationalForceMagnitude() {
 		return gravitationalForce.getMagnitude();
 	}
