@@ -12,14 +12,24 @@
 
 <Pane prefHeight="650.0" prefWidth="1200.0" style="-fx-background-color: #191A21;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
    <children>
-      <ImageView fx:id="bg1" fitHeight="925.0" fitWidth="1653.0" layoutX="-18.0" layoutY="-460.0" pickOnBounds="true" preserveRatio="false">
+      <ImageView fx:id="ls1" fitHeight="925.0" fitWidth="1653.0" layoutX="-18.0" layoutY="-433.0" pickOnBounds="true" preserveRatio="false">
+         <image>
+            <Image url="@../image/landscape.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="bg1" fitHeight="925.0" fitWidth="1653.0" layoutX="-18.0" layoutY="-535.0" pickOnBounds="true" preserveRatio="false">
          <image>
             <Image url="@../image/background.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="bg2" fitHeight="925.0" fitWidth="1653.0" layoutX="1635.0" layoutY="-460.0" pickOnBounds="true" preserveRatio="false">
+      <ImageView fx:id="bg2" fitHeight="925.0" fitWidth="1653.0" layoutX="1635.0" layoutY="-535.0" pickOnBounds="true" preserveRatio="false">
          <image>
             <Image url="@../image/background.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ls2" fitHeight="925.0" fitWidth="1653.0" layoutX="1635.0" layoutY="-433.0" pickOnBounds="true" preserveRatio="false">
+         <image>
+            <Image url="@../image/landscape.png" />
          </image>
       </ImageView>
       <Pane layoutX="870.0" layoutY="23.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
@@ -63,13 +73,13 @@
             </Text>
          </children>
       </Pane>
-      <Slider fx:id="forceSlider" layoutX="433.0" layoutY="532.0" max="300.0" min="-300.0" prefHeight="89.0" prefWidth="337.0" showTickLabels="true" showTickMarks="true" />
-      <Text fill="#8be9fd" layoutX="504.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Applied Force">
+      <Slider fx:id="forceSlider" layoutX="433.0" layoutY="564.0" max="300.0" min="-300.0" prefHeight="89.0" prefWidth="337.0" showTickLabels="true" showTickMarks="true" />
+      <Text fill="#8be9fd" layoutX="504.0" layoutY="548.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Applied Force">
          <font>
             <Font size="32.0" />
          </font>
       </Text>
-      <Rectangle fx:id="bg_cube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="263.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle fx:id="bg_cube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="192.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Pane layoutX="20.0" layoutY="23.0" prefHeight="170.0" prefWidth="372.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <RadioButton fx:id="radio_cube" layoutX="23.0" layoutY="71.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="79.0" selected="true" text="Cube" textFill="#8be9fd" />
@@ -82,8 +92,8 @@
             <Text fx:id="txt_sizeLength" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size length (pixels):" />
          </children>
       </Pane>
-      <Circle fx:id="bg_cylinder" fill="#66e389e1" layoutX="602.0" layoutY="363.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-      <Line fx:id="horizontal_line" endX="100.0" layoutX="600.0" layoutY="363.0" startX="-100.0" visible="false"/>
-      <Line fx:id="vertical_line" endX="0.0" endY="-100.0" layoutX="600.0" layoutY="363.0" startX="0.0" startY="100.0" visible="false"/>
+      <Circle fx:id="bg_cylinder" fill="#66e389e1" layoutX="602.0" layoutY="293.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+      <Line fx:id="horizontal_line" endX="100.0" layoutX="600.0" layoutY="293.0" startX="-100.0" visible="false" />
+      <Line fx:id="vertical_line" endX="0.0" endY="-100.0" layoutX="600.0" layoutY="293.0" startX="0.0" startY="100.0" visible="false" />
    </children>
 </Pane>

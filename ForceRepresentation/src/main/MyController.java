@@ -62,6 +62,12 @@ public class MyController implements Initializable {
 
 	@FXML
 	private ImageView bg2;
+	
+	@FXML
+	private ImageView ls1;
+
+	@FXML
+	private ImageView ls2;
 
 	@FXML
 	private Rectangle bg_cube;
@@ -195,31 +201,55 @@ public class MyController implements Initializable {
 		if (obj instanceof Cube) {
 			old_x = cube.getX();
 			cube.proceed(elastedSecond);
-			if (bg1.getX() - (cube.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
+			
+			//reset back to original position to prevent backgrounds run out of scene
+			//multiply by 50 to make the animation looks faster
+			if (ls1.getX() - (cube.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
+				ls1.setX(0);
+				ls2.setX(0);
+			} else if (ls1.getX() - (cube.getX() - old_x)*40 > 0) {
+				ls1.setX(-BACKGROUND_WIDTH);
+				ls2.setX(-BACKGROUND_WIDTH);
+			} else {
+				ls1.setX(ls1.getX() - (cube.getX() - old_x)*40);
+				ls2.setX(ls2.getX() - (cube.getX() - old_x)*40);
+			}
+			if (bg1.getX() - (cube.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
 				bg1.setX(0);
 				bg2.setX(0);
-			} else if (bg1.getX() - (cube.getX() - old_x)*50 > 0) {
+			} else if (bg1.getX() - (cube.getX() - old_x)*10 > 0) {
 				bg1.setX(-BACKGROUND_WIDTH);
 				bg2.setX(-BACKGROUND_WIDTH);
 			} else {
-				bg1.setX(bg1.getX() - (cube.getX() - old_x)*50);
-				bg2.setX(bg2.getX() - (cube.getX() - old_x)*50);
+				bg1.setX(bg1.getX() - (cube.getX() - old_x)*10);
+				bg2.setX(bg2.getX() - (cube.getX() - old_x)*10);
 			}
 		} else {
 			old_x = cylinder.getX();
 			cylinder.proceed(elastedSecond);
-			if (bg1.getX() - (cylinder.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
+			if (ls1.getX() - (cylinder.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
+				ls1.setX(0);
+				ls2.setX(0);
+			} else if (ls1.getX() - (cylinder.getX() - old_x)*40 > 0) {
+				ls1.setX(-BACKGROUND_WIDTH);
+				ls2.setX(-BACKGROUND_WIDTH);
+			} else {
+				ls1.setX(ls1.getX() - (cylinder.getX() - old_x)*40);
+				ls2.setX(ls2.getX() - (cylinder.getX() - old_x)*40);
+			}
+			if (bg1.getX() - (cylinder.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
 				bg1.setX(0);
 				bg2.setX(0);
-			} else if (bg1.getX() - (cylinder.getX() - old_x)*50 > 0) {
+			} else if (bg1.getX() - (cylinder.getX() - old_x)*10 > 0) {
 				bg1.setX(-BACKGROUND_WIDTH);
 				bg2.setX(-BACKGROUND_WIDTH);
 			} else {
-				bg1.setX(bg1.getX() - (cylinder.getX() - old_x)*50);
-				bg2.setX(bg2.getX() - (cylinder.getX() - old_x)*50);
+				bg1.setX(bg1.getX() - (cylinder.getX() - old_x)*10);
+				bg2.setX(bg2.getX() - (cylinder.getX() - old_x)*10);
 			}
-			horizontal_line.setRotate(horizontal_line.getRotate() + (cylinder.getX() - old_x)*25);
-			vertical_line.setRotate(vertical_line.getRotate() + (cylinder.getX() - old_x)*25);
+			//multiply by 25 because the rotation is faster than transition
+			horizontal_line.setRotate(horizontal_line.getRotate() + (cylinder.getX() - old_x)*20);
+			vertical_line.setRotate(vertical_line.getRotate() + (cylinder.getX() - old_x)*20);
 		}
 	}
 
