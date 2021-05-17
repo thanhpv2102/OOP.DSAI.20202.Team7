@@ -199,21 +199,6 @@ public class MyController implements Initializable {
 		});
 
 
-		//Alter kinetic friction coef with kineticSlider
-		kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				// TODO Auto-generated method stub
-				if (kineticSlider.getValue() <= staticSlider.getValue()) {
-					kineticSlider.adjustValue(staticSlider.getValue());
-				}
-				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
-				//			display(cube);
-				//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
-			}
-
-		});
-
 		//initialize toggle group
 		/* radio_cube.setToggleGroup(group);
 		radio_cylinder.setToggleGroup(group);
@@ -275,14 +260,13 @@ public class MyController implements Initializable {
 					updateTransition(cylinder, elastedNanoSecond);
 				}
 			}
+			lastUpdateAnimation.set(now);
 		}
 	}
 
 	public void cubeDragged(MouseEvent event) {
 		choiceCube.setTranslateX(event.getX() + choiceCube.getTranslateX() );
 		choiceCube.setTranslateY(event.getY() + choiceCube.getTranslateY() );
-
-
 	}
 
 	public void cubeReleased(MouseEvent event) {
@@ -307,7 +291,6 @@ public class MyController implements Initializable {
 			choiceCylinder.setVisible( false);
 		}
 	}
-
 
 	public void cylinderDragged(MouseEvent event) {
 		choiceCylinder.setTranslateX(event.getX() + choiceCylinder.getTranslateX() );

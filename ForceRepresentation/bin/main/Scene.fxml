@@ -85,7 +85,7 @@
          </font>
       </Text>
       <Rectangle fx:id="bg_cube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="192.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Pane layoutX="20.0" layoutY="23.0" prefHeight="170.0" prefWidth="372.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <Pane layoutX="416.0" layoutY="3.0" prefHeight="170.0" prefWidth="372.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <RadioButton fx:id="radio_cube" layoutX="23.0" layoutY="71.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="79.0" selected="true" text="Cube" textFill="#8be9fd" />
             <RadioButton fx:id="radio_cylinder" layoutX="23.0" layoutY="98.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="109.0" text="Cyclinder" textFill="#8be9fd" />
