@@ -27,7 +27,7 @@ public class Cylinder extends ActedObject {
 		return angularAcceleration;
 	}
 	
-	public Cylinder(double mass, double radius, ActorForce actorForce, Surface surface) {
+	public Cylinder(double mass, double radius, ChangeableForce actorForce, Surface surface) {
 		super(mass, 0, radius, actorForce, surface);
 		this.radius = radius;
 		// TODO Auto-generated constructor stub
