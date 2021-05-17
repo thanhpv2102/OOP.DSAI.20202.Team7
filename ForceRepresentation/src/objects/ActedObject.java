@@ -5,10 +5,10 @@ import force.*;
 public abstract class ActedObject {
 
 	private double mass;
-	protected GravitationalForce gravitationalForce;
-	protected NormalForce normalForce;
-	protected ActorForce actorForce;
-	protected FrictionalForce frictionalForce;
+	protected Force gravitationalForce;
+	protected Force normalForce;
+	protected ChangeableForce actorForce;
+	protected ChangeableForce frictionalForce;
 	protected Surface surface;
 	private double x;
 	private double y;
@@ -37,21 +37,33 @@ public abstract class ActedObject {
 	}
 
 	
-	public ActedObject(double mass, double x, double y, ActorForce actorForce, Surface surface) {
+	public ActedObject(double mass, double x, double y, ChangeableForce actorForce, Surface surface) {
 		//(x,y) is the coordinates of the center of the object
 		//Must specify the actor force and the surface related to the object
 		super();
 		this.mass = mass;
 		this.x = x;
 		this.y = y;
-		this.gravitationalForce = new GravitationalForce(this.x, this.y, this.mass*10);
-		this.normalForce = new NormalForce(this.x, this.y, this.gravitationalForce.getMagnitude());
-		this.frictionalForce = new FrictionalForce(this.x, 0, 0);
+		this.gravitationalForce = new Force(this.x, this.y, this.mass*10);
+		this.normalForce = new Force(this.x, this.y, this.gravitationalForce.getMagnitude());
+		this.frictionalForce = new ChangeableForce(this.x, 0, 0);
 		this.actorForce = actorForce;
 		this.surface = surface;
 	}
 	
 	
+	public double getGravitationalForceMagnitude() {
+		return gravitationalForce.getMagnitude();
+	}
+	public double getNormalForceMagnitude() {
+		return normalForce.getMagnitude();
+	}
+	public double getActorForceMagnitude() {
+		return actorForce.getMagnitude();
+	}
+	public double getFrictionalForceMagnitude() {
+		return frictionalForce.getMagnitude();
+	}
 	public double getSumForce() {
 		//Base direction: Right
 		return this.actorForce.getMagnitude() - this.frictionalForce.getMagnitude();

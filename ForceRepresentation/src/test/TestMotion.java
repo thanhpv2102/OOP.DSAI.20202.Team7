@@ -2,7 +2,7 @@ package test;
 
 import java.util.Scanner;
 
-import force.ActorForce;
+import force.ChangeableForce;
 import objects.ActedObject;
 import objects.Cube;
 import objects.Cylinder;
@@ -25,7 +25,7 @@ public class TestMotion {
 		double y = 0;
 		
 		Surface surface = new Surface(staticFrictionCoef, kineticFrictionCoef);
-		ActorForce force = new ActorForce(x, y);
+		ChangeableForce force = new ChangeableForce(x, y);
 		
 		System.out.println("--------FORCE--------");
 		System.out.println("Enter force magnitude:");
@@ -56,7 +56,7 @@ public class TestMotion {
 		
 	}
 	
-	public static void start(ActedObject obj, ActorForce force, Surface surface) {
+	public static void start(ActedObject obj, ChangeableForce force, Surface surface) {
 		if (obj instanceof Cube) {
 			Cube cube = (Cube) obj;
 			double t = 0;

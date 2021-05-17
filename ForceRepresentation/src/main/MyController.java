@@ -1,6 +1,6 @@
 package main;
 
-import force.ActorForce;
+import force.ChangeableForce;
 import objects.*;
 
 import java.net.URL;
@@ -26,12 +26,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -40,12 +44,17 @@ import javafx.util.Duration;
 
 public class MyController implements Initializable {
 
-	private ActorForce force = new ActorForce(0, 0, 0);
+	private ChangeableForce force = new ChangeableForce(0, 0, 0);
 	private Surface surface = new Surface(0.25, 0.25);
 	private final LongProperty lastUpdateAnimation = new SimpleLongProperty(0);
 	private Cube cube;
 	private Cylinder cylinder;
 
+	private double mass;
+	private double sideLength;
+
+	private boolean cubeChosen = false;
+	private boolean cylinderChosen = false; 
 	@FXML
 	private Slider staticSlider;
 
@@ -62,7 +71,7 @@ public class MyController implements Initializable {
 
 	@FXML
 	private ImageView bg2;
-	
+
 	@FXML
 	private ImageView ls1;
 
@@ -104,6 +113,55 @@ public class MyController implements Initializable {
 	@FXML
 	private Line vertical_line;
 
+	@FXML
+	private TextArea sumForcesDisplay;
+
+	@FXML
+	private TextArea gravitationalForceDisplay;
+
+	@FXML
+	private TextArea normalForceDisplay;
+
+	@FXML
+	private TextArea actorForceDisplay;
+
+	@FXML
+	private TextArea frictionalForceDisplay;
+
+	@FXML
+	private TextField massDisplay;
+
+	@FXML
+	private TextField speedDisplay;
+
+	@FXML
+	private  TextField accelerationDisplay;
+
+	@FXML
+	private CheckBox forcesBox;
+
+	@FXML
+	private  CheckBox sumForcesBox;
+
+	@FXML
+	private CheckBox valuesBox;
+
+	@FXML
+	private CheckBox massBox;
+
+	@FXML
+	private CheckBox speedBox;
+
+	@FXML
+	private  CheckBox accelerationBox;
+
+	@FXML 
+	private Rectangle choiceCube;
+
+	@FXML 
+	private Circle choiceCylinder;
+
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -111,8 +169,10 @@ public class MyController implements Initializable {
 		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 
 		//Alter static friction coef with staticSlider
+		massDisplay.setVisible(false);
+		bg_cube.setVisible(false);
+		bg_cylinder.setVisible(false);
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
-
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				if (staticSlider.getValue() >= kineticSlider.getValue()) {
@@ -138,10 +198,25 @@ public class MyController implements Initializable {
 
 		});
 
-		//initialize toggle group
-		radio_cube.setToggleGroup(group);
-		radio_cylinder.setToggleGroup(group);
 
+		//Alter kinetic friction coef with kineticSlider
+		kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				// TODO Auto-generated method stub
+				if (kineticSlider.getValue() <= staticSlider.getValue()) {
+					kineticSlider.adjustValue(staticSlider.getValue());
+				}
+				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
+				//			display(cube);
+				//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
+			}
+
+		});
+
+		//initialize toggle group
+		/* radio_cube.setToggleGroup(group);
+		radio_cylinder.setToggleGroup(group);
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle arg2) {
@@ -166,7 +241,7 @@ public class MyController implements Initializable {
 					vertical_line.setVisible(true);
 				}
 			}
-		});
+		}); */
 
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
@@ -177,6 +252,15 @@ public class MyController implements Initializable {
 				parallaxAnimation.start();
 			}
 		});
+
+	}
+
+	public void submitMass(ActionEvent event) {
+		try {
+			mass = Double.parseDouble(input_mass.getText());
+		} catch(Exception e) {
+			input_mass.setText("Please enter a number for the mass!");
+		}
 	}
 
 	private class ParallaxAnimation extends AnimationTimer {
@@ -191,9 +275,166 @@ public class MyController implements Initializable {
 					updateTransition(cylinder, elastedNanoSecond);
 				}
 			}
-			lastUpdateAnimation.set(now);
 		}
 	}
+
+	public void cubeDragged(MouseEvent event) {
+		choiceCube.setTranslateX(event.getX() + choiceCube.getTranslateX() );
+		choiceCube.setTranslateY(event.getY() + choiceCube.getTranslateY() );
+
+
+	}
+
+	public void cubeReleased(MouseEvent event) {
+		if ( choiceCube.getTranslateY() < ( 400 - choiceCube.getLayoutY()) )   {
+			cylinderChosen = false;
+			cubeChosen = true;
+			bg_cylinder.setVisible(false);
+			bg_cube.setVisible(true);
+			choiceCube.setTranslateX(0);
+			choiceCube.setTranslateY(0);
+			choiceCube.setVisible(false);
+		} else {
+			choiceCube.setTranslateX(0);
+			choiceCube.setTranslateY(0);
+		}	
+		if (cubeChosen == true) {
+			choiceCylinder.setVisible( true);
+			choiceCube.setVisible(false);
+		}
+		if (cylinderChosen == true) {
+			choiceCube.setVisible( true);
+			choiceCylinder.setVisible( false);
+		}
+	}
+
+
+	public void cylinderDragged(MouseEvent event) {
+		choiceCylinder.setTranslateX(event.getX() + choiceCylinder.getTranslateX() );
+		choiceCylinder.setTranslateY(event.getY() + choiceCylinder.getTranslateY() );
+	}
+
+	public void cylinderReleased(MouseEvent event) {
+		if ( choiceCylinder.getTranslateY() < ( 400 - choiceCylinder.getLayoutY()) )   {
+			cylinderChosen = true;
+			cubeChosen = false;	
+			bg_cube.setVisible(false);
+			bg_cylinder.setVisible(true);
+			horizontal_line.setVisible(true);
+			vertical_line.setVisible(true);
+		}
+		choiceCylinder.setTranslateX(0);
+		choiceCylinder.setTranslateY(0);
+		if (cubeChosen == true) {
+			choiceCylinder.setVisible( true);
+			choiceCube.setVisible(false);
+		}
+		if (cylinderChosen == true) {
+			choiceCube.setVisible( true);
+			choiceCylinder.setVisible( false);
+		}
+	}
+
+
+
+	public void handleDragOver(MouseEvent event) {
+	}
+
+
+	public void display(ActedObject object) {
+		//Phần lực phải hiện thị bằng mũi tên, nên sẽ thay thế sau
+
+		if (valuesBox.isSelected() == true) {
+			gravitationalForceDisplay.setVisible(true);
+			normalForceDisplay.setVisible(true);
+			frictionalForceDisplay.setVisible(true);
+			actorForceDisplay.setVisible(true);
+
+			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ) + " N");
+			normalForceDisplay.setText(Double.toString( object.getNormalForceMagnitude() ) + " N");
+			frictionalForceDisplay.setText(Double.toString( object.getFrictionalForceMagnitude() ) + " N");
+
+			String rounded = String.format("%.2f", object.getActorForceMagnitude());
+			actorForceDisplay.setText(rounded + " N");
+		} else {
+			gravitationalForceDisplay.setVisible(false);
+			normalForceDisplay.setVisible(false);
+			frictionalForceDisplay.setVisible(false);
+			actorForceDisplay.setVisible(false);
+		}
+
+		if (sumForcesBox.isSelected() == true) {
+			sumForcesDisplay.setVisible(true);
+			sumForcesDisplay.setText(Double.toString(object.getSumForce()) + " N");
+		} else {
+			sumForcesDisplay.setVisible(false);
+		}
+
+		if (massBox.isSelected() == true) {
+			massDisplay.setVisible(true);
+			String rounded = String.format("%.2f", object.getMass());
+			massDisplay.setText(rounded + " Kg");
+		} else {
+			massDisplay.setVisible(false);
+
+		}
+		if (speedBox.isSelected() == true) {
+			speedDisplay.setVisible(true);
+			String rounded = String.format("%.2f", object.getVelocity());
+			speedDisplay.setText(rounded + " m/s");
+		} else {
+			speedDisplay.setVisible(false);
+
+		}
+		if (accelerationBox.isSelected() == true) {
+			accelerationDisplay.setVisible(true);
+			String rounded = String.format("%.2f", object.getAcceleration());
+			accelerationDisplay.setText(rounded + " m/s\u00b2");
+
+		} else {
+			accelerationDisplay.setVisible(false);
+
+		}
+	}
+
+
+	//
+	//	public static void start(ActedObject obj, ChangeableForce force, Surface surface) {
+	//
+	//		if (obj instanceof Cube) {
+	//			Cube cube = (Cube) obj;
+	//			double t = 0;
+	//			while (t < 10) {
+	//				if (t > 5) {
+	//					force.setMagnitude(1000.0);
+	//				}
+	//				cube.proceed(0.001);
+	//				System.out.println("Time (s): " + t);
+	//				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
+	//				System.out.println("Total force magnitude: " + cube.getSumForce());
+	//				System.out.println("--------------------------------------");
+	//				display(obj);
+	//				t += 0.001;
+	//			}
+	//		} else if (obj instanceof Cylinder) {
+	//			Cylinder cyclinder = (Cylinder) obj;
+	//			double t = 0;
+	//			while (t < 10) {
+	//				if (t > 5) {
+	//					force.setMagnitude(1000.0);
+	//				}
+	//				cyclinder.proceed(0.001);
+	//				System.out.println("Time (s): " + t);
+	//				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
+	//				System.out.println("Total force magnitude: " + cyclinder.getSumForce());
+	//				System.out.println("--------------------------------------");
+	//				display(obj);
+	//				t += 0.001;
+	//
+	//			}
+	//			lastUpdateAnimation.set(now);
+	//		}
+	//	}
 
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
@@ -201,7 +442,7 @@ public class MyController implements Initializable {
 		if (obj instanceof Cube) {
 			old_x = cube.getX();
 			cube.proceed(elastedSecond);
-			
+
 			//reset back to original position to prevent backgrounds run out of scene
 			//multiply by 50 to make the animation looks faster
 			if (ls1.getX() - (cube.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
@@ -252,5 +493,4 @@ public class MyController implements Initializable {
 			vertical_line.setRotate(vertical_line.getRotate() + (cylinder.getX() - old_x)*20);
 		}
 	}
-
 }
