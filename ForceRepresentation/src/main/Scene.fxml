@@ -94,6 +94,7 @@
             <Text fill="#8be9fd" layoutX="195.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mass (kg):" />
             <Text fx:id="txt_radius" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Radius (pixels):" visible="false" />
             <Text fx:id="txt_sizeLength" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size length (pixels):" />
+            <Button fx:id="pauseButton" layoutX="43.0" layoutY="70.0" mnemonicParsing="false" onAction="#pauseHandle" text="Pause" />
          </children>
       </Pane>
       <Circle fx:id="bg_cylinder" fill="#66e389e1" layoutX="600.0" layoutY="292.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />

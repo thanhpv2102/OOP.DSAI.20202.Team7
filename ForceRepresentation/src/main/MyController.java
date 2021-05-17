@@ -192,6 +192,9 @@ public class MyController implements Initializable {
 	
 	@FXML 
 	private Label sumForceLabel;
+	
+	@FXML
+	private Button pauseButton;
 
 
 	@Override
@@ -248,6 +251,7 @@ public class MyController implements Initializable {
 				force.setMagnitude(forceSlider.getValue());
 				AnimationTimer parallaxAnimation = new ParallaxAnimation();
 				parallaxAnimation.start();
+					
 			}
 		});
 
@@ -260,22 +264,36 @@ public class MyController implements Initializable {
 			input_mass.setText("Please enter a number for the mass!");
 		}
 	}
+	
+	public void pauseHandle(ActionEvent event) {
+		if (pauseButton.getText().equals("Pause")) {
+			pauseButton.setText("Resume");
+		} else if (pauseButton.getText().equals("Resume")) {
+			pauseButton.setText("Pause");
+
+		}
+
+	}
 
 	private class ParallaxAnimation extends AnimationTimer {
 		@Override
 		public void handle(long now) {
-			if (lastUpdateAnimation.get() > 0) {
-				long elastedNanoSecond = now - lastUpdateAnimation.get();
-				// to do
-				if (bg_cube.isVisible()) {
-					display(cube);
-					updateTransition(cube, elastedNanoSecond);
-				} else if (bg_cylinder.isVisible()) {
-					display(cylinder);
-					updateTransition(cylinder, elastedNanoSecond);
+			if (pauseButton.getText().equals("Pause")) {
+				if (lastUpdateAnimation.get() > 0) {
+					long elastedNanoSecond = now - lastUpdateAnimation.get();
+					// to do
+					if (bg_cube.isVisible()) {
+						display(cube);
+						updateTransition(cube, elastedNanoSecond);
+					} else if (bg_cylinder.isVisible()) {
+						display(cylinder);
+						updateTransition(cylinder, elastedNanoSecond);
+					}
 				}
+				lastUpdateAnimation.set(now);
 			}
-			lastUpdateAnimation.set(now);
+			
+			
 		}
 	}
 
@@ -337,10 +355,6 @@ public class MyController implements Initializable {
 
 
 
-	public void handleDragOver(MouseEvent event) {
-	}
-
-
 	public void display(ActedObject object) {
 		//Phần lực phải hiện thị bằng mũi tên, nên sẽ thay thế sau
 
@@ -388,9 +402,7 @@ public class MyController implements Initializable {
 			//gravitationalArrow.setTranslateX(gravitationalArrow.getTranslateX());
 			String roundedSum = String.format("%.2f", Math.abs(object.getSumForce()));
 			sumForceLabel.setText(roundedSum + " N");
-			
-
-			
+		
 
 
 			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ) + " N");
