@@ -4,37 +4,22 @@ import force.ChangeableForce;
 import objects.*;
 
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.event.EventHandler;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -44,7 +29,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 public class MyController implements Initializable {
 
@@ -228,8 +212,10 @@ public class MyController implements Initializable {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
 				forceValue.setText(String.valueOf(forceSlider.getValue()));
-				AnimationTimer parallaxAnimation = new ParallaxAnimation();
-				parallaxAnimation.start();
+				if (obj != null) {
+					AnimationTimer parallaxAnimation = new ParallaxAnimation();
+					parallaxAnimation.start();
+				}
 			}
 		});
 
