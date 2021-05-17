@@ -71,8 +71,10 @@ public abstract class ActedObject {
 	
 	//If the speed of the object surpasses a threshold, then we have to stop applying force on it
 	//otherwise the speed can reach infinity at some point
-	public boolean validateSpeedThreshold() {
-		return Math.abs(this.velocity) >= this.MAX_SPEED;
+	public void validateSpeedThreshold() {
+		if ( Math.abs(this.velocity) >= this.MAX_SPEED ) {
+			this.actorForce.setMagnitude(0);
+		}
 	}
 	
 	//Method to update frictional force
