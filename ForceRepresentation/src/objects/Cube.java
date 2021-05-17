@@ -11,7 +11,7 @@ public class Cube extends ActedObject {
 	}
 	
 	
-	public Cube(double mass, double sideLength, ActorForce actorForce, Surface surface) {
+	public Cube(double mass, double sideLength, ChangeableForce actorForce, Surface surface) {
 		super(mass, 0, sideLength/2, actorForce, surface);
 		this.sideLength = sideLength;
 		// TODO Auto-generated constructor stub

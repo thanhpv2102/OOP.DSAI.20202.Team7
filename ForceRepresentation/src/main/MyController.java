@@ -1,6 +1,6 @@
 package main;
 
-import force.ActorForce;
+import force.ChangeableForce;
 import objects.*;
 
 import java.net.URL;
@@ -39,7 +39,7 @@ import javafx.util.Duration;
 
 public class MyController implements Initializable {
 
-	private ActorForce force = new ActorForce(0, 0, 0);
+	private ChangeableForce force = new ChangeableForce(0, 0, 0);
 	private Surface surface = new Surface(0.25, 0.25);
 	private Cube cube;
 	private Cylinder cylinder;
@@ -418,7 +418,9 @@ public class MyController implements Initializable {
 	}
 	
 	
-	public void start(ActedObject obj, ActorForce force, Surface surface) {
+
+	public static void start(ActedObject obj, ChangeableForce force, Surface surface) {
+
 		if (obj instanceof Cube) {
 			Cube cube = (Cube) obj;
 			double t = 0;

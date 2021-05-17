@@ -1,13 +1,13 @@
 package force;
 
-public abstract class HorizontalForce extends Force{
+public class ChangeableForce extends Force{
 
-	public HorizontalForce(double rootX, double rootY, double magnitude) {
+	public ChangeableForce(double rootX, double rootY, double magnitude) {
 		super(rootX, rootY, magnitude);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public HorizontalForce(double rootX, double rootY) {
+	public ChangeableForce(double rootX, double rootY) {
 		super(rootX, rootY);
 	}
 
