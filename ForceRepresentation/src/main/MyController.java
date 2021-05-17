@@ -30,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -42,7 +43,12 @@ public class MyController implements Initializable {
 	private Surface surface = new Surface(0.25, 0.25);
 	private Cube cube;
 	private Cylinder cylinder;
-
+	
+	private double mass;
+	private double sideLength;
+	
+	private boolean cubeChosen = false;
+	private boolean cylinderChosen = false; 
 	@FXML
     private Slider staticSlider;
    
@@ -106,52 +112,63 @@ public class MyController implements Initializable {
 	private Line vertical_line;
 	
 	@FXML
-	private static TextArea sumForcesDisplay;
+	private TextArea sumForcesDisplay;
 	
 	@FXML
-	private static TextArea gravitationalForceDisplay;
+	private TextArea gravitationalForceDisplay;
 	
 	@FXML
-	private static TextArea normalForceDisplay;
+	private TextArea normalForceDisplay;
 	
 	@FXML
-	private static TextArea actorForceDisplay;
+	private TextArea actorForceDisplay;
 	
 	@FXML
-	private static TextArea frictionalForceDisplay;
+	private TextArea frictionalForceDisplay;
 	
 	@FXML
-	private static TextArea massDisplay;
+	private TextField massDisplay;
 	
 	@FXML
-	private static TextArea speedDisplay;
+	private TextField speedDisplay;
 	
 	@FXML
-	private static TextArea accelerationDisplay;
+	private  TextField accelerationDisplay;
 	
 	@FXML
-	private static CheckBox forcesBox;
+	private CheckBox forcesBox;
 	   
 	@FXML
-	private static CheckBox sumForcesBox;
+	private  CheckBox sumForcesBox;
 	   
 	@FXML
-	private static CheckBox valuesBox;
+	private CheckBox valuesBox;
 	   
 	@FXML
-	private static CheckBox massBox;
+	private CheckBox massBox;
 	   
 	@FXML
-	private static CheckBox speedBox;
+	private CheckBox speedBox;
 	   
 	 @FXML
-	 private static CheckBox accelerationBox;
+	 private  CheckBox accelerationBox;
+	 
+	 @FXML 
+	 private Rectangle choiceCube;
+	 
+	 @FXML 
+	 private Circle choiceCylinder;
+	 
+	
+
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	
 		//Alter static friction coef with staticSlider
+	   massDisplay.setVisible(false);
+	   bg_cube.setVisible(false);
+	   bg_cylinder.setVisible(false);
 	   staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
 		@Override
@@ -160,13 +177,14 @@ public class MyController implements Initializable {
 				staticSlider.adjustValue(kineticSlider.getValue());
 			}
 			surface.setStaticFrictionCoef((double) staticSlider.getValue());
+			display(cube);
 //			System.out.println("static:" + surface.getStaticFrictionCoef());
 		}
 	   });
 	   
+	   
 	   //Alter kinetic friction coef with kineticSlider
 	   kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
-
 		@Override
 		public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 			// TODO Auto-generated method stub
@@ -174,15 +192,15 @@ public class MyController implements Initializable {
 				kineticSlider.adjustValue(staticSlider.getValue());
 			}
 			surface.setKineticFrictionCoef((double) kineticSlider.getValue());
+			display(cube);
 //			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
 		}
 		   
 	   });
 	   
 		//initialize toggle group
-		radio_cube.setToggleGroup(group);
+		/* radio_cube.setToggleGroup(group);
 		radio_cylinder.setToggleGroup(group);
-
 		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			@Override
 			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle arg2) {
@@ -207,7 +225,7 @@ public class MyController implements Initializable {
 					vertical_line.setVisible(true);
 				}
 			}
-		});
+		}); */
 
 		//base animations FORWARD
 		bg_trans1 = new TranslateTransition(Duration.millis(10000), bg1);
@@ -259,6 +277,7 @@ public class MyController implements Initializable {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
 				System.out.println("force:" + force.getMagnitude());
+				display(cube);
 				if (force.getMagnitude() < 0) {
 					setBackgroundTransitionRateBack(Math.abs(arg2.doubleValue()));
 				} else {
@@ -266,19 +285,97 @@ public class MyController implements Initializable {
 				}
 			}
 		});
+		
 	}
 	
-	public static void display(ActedObject object) {
+	public void submitMass(ActionEvent event) {
+		try {
+			mass = Double.parseDouble(input_mass.getText());
+		} catch(Exception e) {
+			input_mass.setText("Please enter a number for the mass!");
+		}
+	}
+	
+	
+	
+	public void cubeDragged(MouseEvent event) {
+	    choiceCube.setTranslateX(event.getX() + choiceCube.getTranslateX() );
+	    choiceCube.setTranslateY(event.getY() + choiceCube.getTranslateY() );
+
+		
+	}
+	
+	public void cubeReleased(MouseEvent event) {
+		if ( choiceCube.getTranslateY() < ( 400 - choiceCube.getLayoutY()) )   {
+			cylinderChosen = false;
+			cubeChosen = true;
+			bg_cylinder.setVisible(false);
+			bg_cube.setVisible(true);
+			choiceCube.setTranslateX(0);
+			choiceCube.setTranslateY(0);
+			choiceCube.setVisible(false);
+		} else {
+			choiceCube.setTranslateX(0);
+			choiceCube.setTranslateY(0);
+			}	
+		if (cubeChosen == true) {
+			choiceCylinder.setVisible( true);
+			choiceCube.setVisible(false);
+		}
+		if (cylinderChosen == true) {
+			choiceCube.setVisible( true);
+			choiceCylinder.setVisible( false);
+		}
+		}
+	
+	
+	public void cylinderDragged(MouseEvent event) {
+	    choiceCylinder.setTranslateX(event.getX() + choiceCylinder.getTranslateX() );
+	    choiceCylinder.setTranslateY(event.getY() + choiceCylinder.getTranslateY() );
+	}
+	
+	public void cylinderReleased(MouseEvent event) {
+		if ( choiceCylinder.getTranslateY() < ( 400 - choiceCylinder.getLayoutY()) )   {
+			cylinderChosen = true;
+			cubeChosen = false;	
+			bg_cube.setVisible(false);
+			bg_cylinder.setVisible(true);
+			horizontal_line.setVisible(true);
+			vertical_line.setVisible(true);
+		}
+		choiceCylinder.setTranslateX(0);
+		choiceCylinder.setTranslateY(0);
+		if (cubeChosen == true) {
+			choiceCylinder.setVisible( true);
+			choiceCube.setVisible(false);
+		}
+		if (cylinderChosen == true) {
+			choiceCube.setVisible( true);
+			choiceCylinder.setVisible( false);
+		}
+	}
+		
+
+	
+	public void handleDragOver(MouseEvent event) {
+	}
+	
+	
+	public void display(ActedObject object) {
+		//Phần lực phải hiện thị bằng mũi tên, nên sẽ thay thế sau
+		
 		if (valuesBox.isSelected() == true) {
 			gravitationalForceDisplay.setVisible(true);
 			normalForceDisplay.setVisible(true);
 			frictionalForceDisplay.setVisible(true);
 			actorForceDisplay.setVisible(true);
 			
-			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ));
-			normalForceDisplay.setText(Double.toString( object.getNormalForceMagnitude() ));
-			frictionalForceDisplay.setText(Double.toString( object.getFrictionalForceMagnitude() ));
-			actorForceDisplay.setText(Double.toString( object.getActorForceMagnitude() ));
+			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ) + " N");
+			normalForceDisplay.setText(Double.toString( object.getNormalForceMagnitude() ) + " N");
+			frictionalForceDisplay.setText(Double.toString( object.getFrictionalForceMagnitude() ) + " N");
+			
+			String rounded = String.format("%.2f", object.getActorForceMagnitude());
+			actorForceDisplay.setText(rounded + " N");
 		} else {
 			gravitationalForceDisplay.setVisible(false);
 			normalForceDisplay.setVisible(false);
@@ -288,28 +385,31 @@ public class MyController implements Initializable {
 		
 		if (sumForcesBox.isSelected() == true) {
 			sumForcesDisplay.setVisible(true);
-			sumForcesDisplay.setText(Double.toString(object.getSumForce()) );
+			sumForcesDisplay.setText(Double.toString(object.getSumForce()) + " N");
 		} else {
 			sumForcesDisplay.setVisible(false);
 		}
 		
 		if (massBox.isSelected() == true) {
 			massDisplay.setVisible(true);
-			massDisplay.setText(Double.toString(object.getMass()) );
+			String rounded = String.format("%.2f", object.getMass());
+			massDisplay.setText(rounded + " Kg");
 		} else {
 			massDisplay.setVisible(false);
 
 		}
 		if (speedBox.isSelected() == true) {
 			speedDisplay.setVisible(true);
-			speedDisplay.setText(Double.toString( object.getVelocity() ));
+			String rounded = String.format("%.2f", object.getVelocity());
+			speedDisplay.setText(rounded + " m/s");
 		} else {
 			speedDisplay.setVisible(false);
 
 		}
 		if (accelerationBox.isSelected() == true) {
 			accelerationDisplay.setVisible(true);
-			accelerationDisplay.setText(Double.toString(object.getAcceleration() )); 
+			String rounded = String.format("%.2f", object.getAcceleration());
+			accelerationDisplay.setText(rounded + " m/s\u00b2");
 
 		} else {
 			accelerationDisplay.setVisible(false);
@@ -318,7 +418,9 @@ public class MyController implements Initializable {
 	}
 	
 	
+
 	public static void start(ActedObject obj, ChangeableForce force, Surface surface) {
+
 		if (obj instanceof Cube) {
 			Cube cube = (Cube) obj;
 			double t = 0;
@@ -364,6 +466,7 @@ public class MyController implements Initializable {
 		}	
 		System.out.println(parallelTransition.getRate());	
 	}
+	
 	
 	public static void setBackgroundTransitionRateBack(double speed) {	
 		//slowly speed up animation from old speed to new speed
