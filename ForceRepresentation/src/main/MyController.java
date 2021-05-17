@@ -97,7 +97,7 @@ public class MyController implements Initializable {
 	private Text txt_radius;
 
 	@FXML
-	private Text txt_sizeLength;
+	private Text txt_sideLength;
 
 	@FXML
 	private Line horizontal_line;
@@ -205,6 +205,29 @@ public class MyController implements Initializable {
 			}
 		});
 
+		//input mass
+		input_mass.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					try {
+						Double inputValue = Double.parseDouble(input_mass.getText());
+						if (bg_cylinder.isVisible()) {
+							obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+							input_mass.setDisable(true);
+							input_radius.setDisable(true);
+						} else if (bg_cube.isVisible()) {
+							obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sideLength.getText()), force, surface);
+							input_mass.setDisable(true);
+							input_sideLength.setDisable(true);
+						}
+					} catch (NumberFormatException e) {
+						input_mass.setText(String.valueOf(50.0));
+					}
+				}
+			}
+		});
+
 		//input side
 		input_sideLength.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -213,16 +236,17 @@ public class MyController implements Initializable {
 					try {
 						Double inputValue = Double.parseDouble(input_sideLength.getText());
 						if (bg_cube.isVisible()) {
-							//to do
+							obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sideLength.getText()), force, surface);
+							input_sideLength.setDisable(true);
 						}
 					} catch (NumberFormatException e) {
-						input_sideLength.setText(String.valueOf(50.0));
+						input_sideLength.setText(String.valueOf(200.0));
 					}
 				}
 			}
 		});
 
-		//input side
+		//input radius
 		input_radius.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
@@ -230,10 +254,11 @@ public class MyController implements Initializable {
 					try {
 						Double inputValue = Double.parseDouble(input_radius.getText());
 						if (bg_cylinder.isVisible()) {
-							//to do
+							obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+							input_radius.setDisable(true);
 						}
 					} catch (NumberFormatException e) {
-						input_radius.setText(String.valueOf(50.0));
+						input_radius.setText(String.valueOf(100.0));
 					}
 				}
 			}
@@ -288,6 +313,12 @@ public class MyController implements Initializable {
 			horizontal_line.setVisible(false);
 			vertical_line.setVisible(false);
 			bg_cube.setVisible(true);
+			input_radius.setVisible(false);
+			txt_radius.setVisible(false);
+			input_sideLength.setVisible(true);
+			txt_sideLength.setVisible(true);
+			input_sideLength.setDisable(false);
+			input_mass.setDisable(false);
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
 			choiceCube.setVisible(false);
@@ -319,6 +350,12 @@ public class MyController implements Initializable {
 			bg_cylinder.setVisible(true);
 			horizontal_line.setVisible(true);
 			vertical_line.setVisible(true);
+			input_sideLength.setVisible(false);
+			txt_sideLength.setVisible(false);
+			txt_radius.setVisible(true);
+			input_radius.setVisible(true);
+			input_radius.setDisable(false);
+			input_mass.setDisable(false);
 			obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 		}
 		choiceCylinder.setTranslateX(0);
