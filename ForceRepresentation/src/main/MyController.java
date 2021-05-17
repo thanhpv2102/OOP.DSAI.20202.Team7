@@ -4,31 +4,45 @@ import force.ChangeableForce;
 import objects.*;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.event.EventHandler;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class MyController implements Initializable {
 
@@ -37,7 +51,6 @@ public class MyController implements Initializable {
 	private final LongProperty lastUpdateAnimation = new SimpleLongProperty(0);
 	private Cube cube;
 	private Cylinder cylinder;
-	private ActedObject obj;
 
 	private double mass;
 	private double sideLength;
@@ -54,9 +67,6 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Slider forceSlider;
-
-	@FXML
-	private TextField forceValue;
 
 	@FXML
 	private ImageView bg1;
@@ -91,13 +101,13 @@ public class MyController implements Initializable {
 	private TextField input_radius;
 
 	@FXML
-	private TextField input_sideLength;
+	private TextField input_sizeLength;
 
 	@FXML
 	private Text txt_radius;
 
 	@FXML
-	private Text txt_sideLength;
+	private Text txt_sizeLength;
 
 	@FXML
 	private Line horizontal_line;
@@ -152,19 +162,59 @@ public class MyController implements Initializable {
 
 	@FXML 
 	private Circle choiceCylinder;
+	
+	@FXML 
+	private SVGPath actorArrow;
+	
+	@FXML 
+	private SVGPath normalArrow;
+	
+	@FXML 
+	private SVGPath sumForceArrow;
+	
+	@FXML 
+	private SVGPath gravitationalArrow;
+	
+	@FXML 
+	private SVGPath frictionalArrow;
+	
+	@FXML 
+	private Label actorForceLabel;
+	
+	@FXML 
+	private Label normalForceLabel;
+	
+	@FXML 
+	private Label gravitationalForceLabel;
+	
+	@FXML 
+	private Label frictionalForceLabel;
+	
+	@FXML 
+	private Label sumForceLabel;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		actorArrow.setVisible(false);
+		normalArrow.setVisible(false);
+		gravitationalArrow.setVisible(false);
+		frictionalArrow.setVisible(false);		
+		sumForceArrow.setVisible(false);
 
-		//		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
-		//		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+		actorForceLabel.setVisible(false);
+		normalForceLabel.setVisible(false);
+		gravitationalForceLabel.setVisible(false);
+		frictionalForceLabel.setVisible(false);
+		sumForceLabel.setVisible(false);
 
+		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
+		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+
+		//Alter static friction coef with staticSlider
 		massDisplay.setVisible(false);
 		bg_cube.setVisible(false);
 		bg_cylinder.setVisible(false);
-
-		//Alter static friction coef with staticSlider
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -181,6 +231,7 @@ public class MyController implements Initializable {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				// TODO Auto-generated method stub
 				if (kineticSlider.getValue() <= staticSlider.getValue()) {
 					kineticSlider.adjustValue(staticSlider.getValue());
 				}
@@ -190,95 +241,17 @@ public class MyController implements Initializable {
 
 		});
 
-		//the user can input applied force value in this text field
-		forceValue.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {
-					try {
-						Double inputValue = Double.parseDouble(forceValue.getText());
-						forceSlider.adjustValue(inputValue);
-					} catch (NumberFormatException e) {
-						forceValue.setText(String.valueOf(forceSlider.getValue()));
-					}
-				}
-			}
-		});
-
-		//input mass
-		input_mass.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {
-					try {
-						Double inputValue = Double.parseDouble(input_mass.getText());
-						if (bg_cylinder.isVisible()) {
-							obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
-							input_mass.setDisable(true);
-							input_radius.setDisable(true);
-						} else if (bg_cube.isVisible()) {
-							obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sideLength.getText()), force, surface);
-							input_mass.setDisable(true);
-							input_sideLength.setDisable(true);
-						}
-					} catch (NumberFormatException e) {
-						input_mass.setText(String.valueOf(50.0));
-					}
-				}
-			}
-		});
-
-		//input side
-		input_sideLength.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {
-					try {
-						Double inputValue = Double.parseDouble(input_sideLength.getText());
-						if (bg_cube.isVisible()) {
-							obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sideLength.getText()), force, surface);
-							input_sideLength.setDisable(true);
-						}
-					} catch (NumberFormatException e) {
-						input_sideLength.setText(String.valueOf(200.0));
-					}
-				}
-			}
-		});
-
-		//input radius
-		input_radius.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {
-					try {
-						Double inputValue = Double.parseDouble(input_radius.getText());
-						if (bg_cylinder.isVisible()) {
-							obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
-							input_radius.setDisable(true);
-						}
-					} catch (NumberFormatException e) {
-						input_radius.setText(String.valueOf(100.0));
-					}
-				}
-			}
-		});
-
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
-				forceValue.setText(String.valueOf(forceSlider.getValue()));
-				if (obj != null) {
-					AnimationTimer parallaxAnimation = new ParallaxAnimation();
-					parallaxAnimation.start();
-				}
+				AnimationTimer parallaxAnimation = new ParallaxAnimation();
+				parallaxAnimation.start();
 			}
 		});
 
 	}
-
 
 	public void submitMass(ActionEvent event) {
 		try {
@@ -293,8 +266,14 @@ public class MyController implements Initializable {
 		public void handle(long now) {
 			if (lastUpdateAnimation.get() > 0) {
 				long elastedNanoSecond = now - lastUpdateAnimation.get();
-				display(obj);
-				updateTransition(obj, elastedNanoSecond);
+				// to do
+				if (bg_cube.isVisible()) {
+					display(cube);
+					updateTransition(cube, elastedNanoSecond);
+				} else if (bg_cylinder.isVisible()) {
+					display(cylinder);
+					updateTransition(cylinder, elastedNanoSecond);
+				}
 			}
 			lastUpdateAnimation.set(now);
 		}
@@ -313,16 +292,9 @@ public class MyController implements Initializable {
 			horizontal_line.setVisible(false);
 			vertical_line.setVisible(false);
 			bg_cube.setVisible(true);
-			input_radius.setVisible(false);
-			txt_radius.setVisible(false);
-			input_sideLength.setVisible(true);
-			txt_sideLength.setVisible(true);
-			input_sideLength.setDisable(false);
-			input_mass.setDisable(false);
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
 			choiceCube.setVisible(false);
-			obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sideLength.getText()), force, surface);
 		} else {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
@@ -350,13 +322,6 @@ public class MyController implements Initializable {
 			bg_cylinder.setVisible(true);
 			horizontal_line.setVisible(true);
 			vertical_line.setVisible(true);
-			input_sideLength.setVisible(false);
-			txt_sideLength.setVisible(false);
-			txt_radius.setVisible(true);
-			input_radius.setVisible(true);
-			input_radius.setDisable(false);
-			input_mass.setDisable(false);
-			obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 		}
 		choiceCylinder.setTranslateX(0);
 		choiceCylinder.setTranslateY(0);
@@ -384,6 +349,49 @@ public class MyController implements Initializable {
 			normalForceDisplay.setVisible(true);
 			frictionalForceDisplay.setVisible(true);
 			actorForceDisplay.setVisible(true);
+			
+			
+			actorArrow.setVisible(true);
+			normalArrow.setVisible(true);
+			gravitationalArrow.setVisible(true);
+			frictionalArrow.setVisible(true);		
+			sumForceArrow.setVisible(true);
+
+			actorForceLabel.setVisible(true);
+			normalForceLabel.setVisible(true);
+			gravitationalForceLabel.setVisible(true);
+			frictionalForceLabel.setVisible(true);
+			sumForceLabel.setVisible(true);
+			
+			actorArrow.setScaleX(object.getActorForceMagnitude() / actorArrow.boundsInLocalProperty().get().getWidth());
+			//actorArrow.setTranslateX(actorArrow.getTranslateX());
+			String roundedActor = String.format("%.2f", Math.abs(object.getActorForceMagnitude()) );
+			actorForceLabel.setText(roundedActor + " N");
+			
+			normalArrow.setScaleX(object.getNormalForceMagnitude() / normalArrow.boundsInLocalProperty().get().getWidth());
+			//normalArrow.setTranslateX(normalArrow.getTranslateX());
+			String roundedNormal = String.format("%.2f", Math.abs(object.getNormalForceMagnitude()));
+			normalForceLabel.setText(roundedNormal + " N");
+			
+			
+			frictionalArrow.setScaleX(object.getFrictionalForceMagnitude() / frictionalArrow.boundsInLocalProperty().get().getWidth());
+		    //frictionalArrow.setTranslateX(frictionalArrow.getTranslateX());
+			String roundedFriction = String.format("%.2f", object.getFrictionalForceMagnitude());
+			frictionalForceLabel.setText(roundedFriction + " N");
+			
+			gravitationalArrow.setScaleX(object.getNormalForceMagnitude() / gravitationalArrow.boundsInLocalProperty().get().getWidth());
+			//gravitationalArrow.setTranslateX(gravitationalArrow.getTranslateX());
+			String roundedGravitational = String.format("%.2f", Math.abs( object.getGravitationalForceMagnitude() ));
+			gravitationalForceLabel.setText(roundedGravitational + " N");
+			
+			sumForceArrow.setScaleX(object.getSumForce() / sumForceArrow.boundsInLocalProperty().get().getWidth());
+			//gravitationalArrow.setTranslateX(gravitationalArrow.getTranslateX());
+			String roundedSum = String.format("%.2f", Math.abs(object.getSumForce()));
+			sumForceLabel.setText(roundedSum + " N");
+			
+
+			
+
 
 			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ) + " N");
 			normalForceDisplay.setText(Double.toString( object.getNormalForceMagnitude() ) + " N");
@@ -415,7 +423,7 @@ public class MyController implements Initializable {
 		}
 		if (speedBox.isSelected() == true) {
 			speedDisplay.setVisible(true);
-			String rounded = String.format("%.2f", Math.abs(object.getVelocity()));
+			String rounded = String.format("%.2f", object.getVelocity());
 			speedDisplay.setText(rounded + " m/s");
 		} else {
 			speedDisplay.setVisible(false);
@@ -434,37 +442,58 @@ public class MyController implements Initializable {
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
 		double old_x;
-		old_x = obj.getX();
-		obj.proceed(elastedSecond);
-		if (ls1.getX() - (obj.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
-			ls1.setX(0);
-			ls2.setX(0);
-		} else if (ls1.getX() - (obj.getX() - old_x)*40 > 0) {
-			ls1.setX(-BACKGROUND_WIDTH);
-			ls2.setX(-BACKGROUND_WIDTH);
-		} else {
-			ls1.setX(ls1.getX() - (obj.getX() - old_x)*40);
-			ls2.setX(ls2.getX() - (obj.getX() - old_x)*40);
-		}
-		if (bg1.getX() - (obj.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
-			bg1.setX(0);
-			bg2.setX(0);
-		} else if (bg1.getX() - (obj.getX() - old_x)*10 > 0) {
-			bg1.setX(-BACKGROUND_WIDTH);
-			bg2.setX(-BACKGROUND_WIDTH);
-		} else {
-			bg1.setX(bg1.getX() - (obj.getX() - old_x)*10);
-			bg2.setX(bg2.getX() - (obj.getX() - old_x)*10);
-		}
+		if (obj instanceof Cube) {
+			old_x = cube.getX();
+			cube.proceed(elastedSecond);
 
-		if (obj instanceof Cylinder) {
+			//reset back to original position to prevent backgrounds run out of scene
+			//multiply by 50 to make the animation looks faster
+			if (ls1.getX() - (cube.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
+				ls1.setX(0);
+				ls2.setX(0);
+			} else if (ls1.getX() - (cube.getX() - old_x)*40 > 0) {
+				ls1.setX(-BACKGROUND_WIDTH);
+				ls2.setX(-BACKGROUND_WIDTH);
+			} else {
+				ls1.setX(ls1.getX() - (cube.getX() - old_x)*40);
+				ls2.setX(ls2.getX() - (cube.getX() - old_x)*40);
+			}
+			if (bg1.getX() - (cube.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
+				bg1.setX(0);
+				bg2.setX(0);
+			} else if (bg1.getX() - (cube.getX() - old_x)*10 > 0) {
+				bg1.setX(-BACKGROUND_WIDTH);
+				bg2.setX(-BACKGROUND_WIDTH);
+			} else {
+				bg1.setX(bg1.getX() - (cube.getX() - old_x)*10);
+				bg2.setX(bg2.getX() - (cube.getX() - old_x)*10);
+			}
+		} else {
+			old_x = cylinder.getX();
+			cylinder.proceed(elastedSecond);
+			if (ls1.getX() - (cylinder.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
+				ls1.setX(0);
+				ls2.setX(0);
+			} else if (ls1.getX() - (cylinder.getX() - old_x)*40 > 0) {
+				ls1.setX(-BACKGROUND_WIDTH);
+				ls2.setX(-BACKGROUND_WIDTH);
+			} else {
+				ls1.setX(ls1.getX() - (cylinder.getX() - old_x)*40);
+				ls2.setX(ls2.getX() - (cylinder.getX() - old_x)*40);
+			}
+			if (bg1.getX() - (cylinder.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
+				bg1.setX(0);
+				bg2.setX(0);
+			} else if (bg1.getX() - (cylinder.getX() - old_x)*10 > 0) {
+				bg1.setX(-BACKGROUND_WIDTH);
+				bg2.setX(-BACKGROUND_WIDTH);
+			} else {
+				bg1.setX(bg1.getX() - (cylinder.getX() - old_x)*10);
+				bg2.setX(bg2.getX() - (cylinder.getX() - old_x)*10);
+			}
 			//multiply by 25 because the rotation is faster than transition
-			horizontal_line.setRotate(horizontal_line.getRotate() + (obj.getX() - old_x)*20);
-			vertical_line.setRotate(vertical_line.getRotate() + (obj.getX() - old_x)*20);
-		}
-
-		if (obj.validateSpeedThreshold()) {
-			forceSlider.adjustValue(0.0);
+			horizontal_line.setRotate(horizontal_line.getRotate() + (cylinder.getX() - old_x)*20);
+			vertical_line.setRotate(vertical_line.getRotate() + (cylinder.getX() - old_x)*20);
 		}
 	}
 }
