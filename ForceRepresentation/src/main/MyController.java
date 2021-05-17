@@ -198,36 +198,6 @@ public class MyController implements Initializable {
 
 		});
 
-
-		//initialize toggle group
-		/* radio_cube.setToggleGroup(group);
-		radio_cylinder.setToggleGroup(group);
-		group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			@Override
-			public void changed(ObservableValue<? extends Toggle> arg0, Toggle arg1, Toggle arg2) {
-				RadioButton button = (RadioButton) group.getSelectedToggle();
-				if (button.getText().equals("Cube")) {
-					input_radius.setVisible(false);
-					input_sizeLength.setVisible(true);
-					txt_radius.setVisible(false);
-					txt_sizeLength.setVisible(true);
-					bg_cylinder.setVisible(false);
-					bg_cube.setVisible(true);
-					horizontal_line.setVisible(false);
-					vertical_line.setVisible(false);
-				} else if (button.getText().equals("Cyclinder")) {
-					input_radius.setVisible(true);
-					input_sizeLength.setVisible(false);
-					txt_radius.setVisible(true);
-					txt_sizeLength.setVisible(false);
-					bg_cylinder.setVisible(true);
-					bg_cube.setVisible(false);
-					horizontal_line.setVisible(true);
-					vertical_line.setVisible(true);
-				}
-			}
-		}); */
-
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
 			@Override
@@ -255,8 +225,10 @@ public class MyController implements Initializable {
 				long elastedNanoSecond = now - lastUpdateAnimation.get();
 				// to do
 				if (bg_cube.isVisible()) {
+					display(cube);
 					updateTransition(cube, elastedNanoSecond);
 				} else if (bg_cylinder.isVisible()) {
+					display(cylinder);
 					updateTransition(cylinder, elastedNanoSecond);
 				}
 			}
@@ -274,6 +246,8 @@ public class MyController implements Initializable {
 			cylinderChosen = false;
 			cubeChosen = true;
 			bg_cylinder.setVisible(false);
+			horizontal_line.setVisible(false);
+			vertical_line.setVisible(false);
 			bg_cube.setVisible(true);
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
@@ -376,48 +350,8 @@ public class MyController implements Initializable {
 
 		} else {
 			accelerationDisplay.setVisible(false);
-
 		}
 	}
-
-
-	//
-	//	public static void start(ActedObject obj, ChangeableForce force, Surface surface) {
-	//
-	//		if (obj instanceof Cube) {
-	//			Cube cube = (Cube) obj;
-	//			double t = 0;
-	//			while (t < 10) {
-	//				if (t > 5) {
-	//					force.setMagnitude(1000.0);
-	//				}
-	//				cube.proceed(0.001);
-	//				System.out.println("Time (s): " + t);
-	//				System.out.println("Position (x, y): " + "(" + cube.getX() + ", " + cube.getY() + ")\n");
-	//				System.out.println("Total force magnitude: " + cube.getSumForce());
-	//				System.out.println("--------------------------------------");
-	//				display(obj);
-	//				t += 0.001;
-	//			}
-	//		} else if (obj instanceof Cylinder) {
-	//			Cylinder cyclinder = (Cylinder) obj;
-	//			double t = 0;
-	//			while (t < 10) {
-	//				if (t > 5) {
-	//					force.setMagnitude(1000.0);
-	//				}
-	//				cyclinder.proceed(0.001);
-	//				System.out.println("Time (s): " + t);
-	//				System.out.println("Position (x, y): " + "(" + cyclinder.getX() + ", " + cyclinder.getY() + ")\n");
-	//				System.out.println("Total force magnitude: " + cyclinder.getSumForce());
-	//				System.out.println("--------------------------------------");
-	//				display(obj);
-	//				t += 0.001;
-	//
-	//			}
-	//			lastUpdateAnimation.set(now);
-	//		}
-	//	}
 
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
