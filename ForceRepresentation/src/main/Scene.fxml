@@ -89,7 +89,7 @@
       <Pane layoutX="848.0" layoutY="513.0" prefHeight="170.0" prefWidth="348.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <TextField fx:id="input_mass" layoutX="193.0" layoutY="54.0" onAction="#submitMass" prefHeight="31.0" prefWidth="137.0" text="50.0" />
-            <TextField fx:id="input_sizeLength" layoutX="195.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="200.0" />
+            <TextField fx:id="input_sideLength" layoutX="195.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="200.0" />
             <TextField fx:id="input_radius" layoutX="193.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="100.0" visible="false" />
             <Text fill="#8be9fd" layoutX="195.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mass (kg):" />
             <Text fx:id="txt_radius" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Radius (pixels):" visible="false" />

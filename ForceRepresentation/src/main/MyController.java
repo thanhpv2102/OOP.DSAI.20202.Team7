@@ -54,7 +54,7 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Slider forceSlider;
-	
+
 	@FXML
 	private TextField forceValue;
 
@@ -91,7 +91,7 @@ public class MyController implements Initializable {
 	private TextField input_radius;
 
 	@FXML
-	private TextField input_sizeLength;
+	private TextField input_sideLength;
 
 	@FXML
 	private Text txt_radius;
@@ -156,14 +156,14 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-//		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
-//		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+
+		//		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
+		//		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 
 		massDisplay.setVisible(false);
 		bg_cube.setVisible(false);
 		bg_cylinder.setVisible(false);
-		
+
 		//Alter static friction coef with staticSlider
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
@@ -189,7 +189,7 @@ public class MyController implements Initializable {
 			}
 
 		});
-		
+
 		//the user can input applied force value in this text field
 		forceValue.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -204,7 +204,40 @@ public class MyController implements Initializable {
 				}
 			}
 		});
-		
+
+		//input side
+		input_sideLength.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					try {
+						Double inputValue = Double.parseDouble(input_sideLength.getText());
+						if (bg_cube.isVisible()) {
+							//to do
+						}
+					} catch (NumberFormatException e) {
+						input_sideLength.setText(String.valueOf(50.0));
+					}
+				}
+			}
+		});
+
+		//input side
+		input_radius.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					try {
+						Double inputValue = Double.parseDouble(input_radius.getText());
+						if (bg_cylinder.isVisible()) {
+							//to do
+						}
+					} catch (NumberFormatException e) {
+						input_radius.setText(String.valueOf(50.0));
+					}
+				}
+			}
+		});
 
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
@@ -258,7 +291,7 @@ public class MyController implements Initializable {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
 			choiceCube.setVisible(false);
-			obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
+			obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sideLength.getText()), force, surface);
 		} else {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
@@ -386,13 +419,13 @@ public class MyController implements Initializable {
 			bg1.setX(bg1.getX() - (obj.getX() - old_x)*10);
 			bg2.setX(bg2.getX() - (obj.getX() - old_x)*10);
 		}
-		
+
 		if (obj instanceof Cylinder) {
 			//multiply by 25 because the rotation is faster than transition
 			horizontal_line.setRotate(horizontal_line.getRotate() + (obj.getX() - old_x)*20);
 			vertical_line.setRotate(vertical_line.getRotate() + (obj.getX() - old_x)*20);
 		}
-		
+
 		if (obj.validateSpeedThreshold()) {
 			forceSlider.adjustValue(0.0);
 		}
