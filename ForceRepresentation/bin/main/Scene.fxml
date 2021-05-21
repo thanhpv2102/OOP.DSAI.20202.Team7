@@ -199,5 +199,6 @@
             <Font size="20.0" />
          </font>
       </Label>
+      <TextField fx:id="forceValue" alignment="CENTER" layoutX="538.0" layoutY="644.0" />
    </children>
 </Pane>

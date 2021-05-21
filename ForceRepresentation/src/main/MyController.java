@@ -23,6 +23,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -36,6 +37,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -49,8 +52,7 @@ public class MyController implements Initializable {
 	private ChangeableForce force = new ChangeableForce(0, 0, 0);
 	private Surface surface = new Surface(0.25, 0.25);
 	private final LongProperty lastUpdateAnimation = new SimpleLongProperty(0);
-	private Cube cube;
-	private Cylinder cylinder;
+	private ActedObject obj;
 
 	private double mass;
 	private double sideLength;
@@ -67,6 +69,9 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Slider forceSlider;
+	
+	@FXML
+	private TextField forceValue;
 
 	@FXML
 	private ImageView bg1;
@@ -211,9 +216,6 @@ public class MyController implements Initializable {
 		frictionalForceLabel.setVisible(false);
 		sumForceLabel.setVisible(false);
 
-		cube = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
-		cylinder = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
-
 		//Alter static friction coef with staticSlider
 		massDisplay.setVisible(false);
 		bg_cube.setVisible(false);
@@ -243,12 +245,28 @@ public class MyController implements Initializable {
 			}
 
 		});
+		
+		//the user can input applied force value in this text field
+		forceValue.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					try {
+						Double inputValue = Double.parseDouble(forceValue.getText());
+						forceSlider.adjustValue(inputValue);
+					} catch (NumberFormatException e) {
+						forceValue.setText(String.valueOf(forceSlider.getValue()));
+					}
+				}
+			}
+		});
 
 		//force slider
 		forceSlider.valueProperty().addListener(new ChangeListener<Number>(){
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
+				forceValue.setText(String.valueOf(forceSlider.getValue()));
 				AnimationTimer parallaxAnimation = new ParallaxAnimation();
 				parallaxAnimation.start();
 					
@@ -281,19 +299,11 @@ public class MyController implements Initializable {
 			if (pauseButton.getText().equals("Pause")) {
 				if (lastUpdateAnimation.get() > 0) {
 					long elastedNanoSecond = now - lastUpdateAnimation.get();
-					// to do
-					if (bg_cube.isVisible()) {
-						display(cube);
-						updateTransition(cube, elastedNanoSecond);
-					} else if (bg_cylinder.isVisible()) {
-						display(cylinder);
-						updateTransition(cylinder, elastedNanoSecond);
-					}
+					display(obj);
+					updateTransition(obj, elastedNanoSecond);
 				}
 				lastUpdateAnimation.set(now);
 			}
-			
-			
 		}
 	}
 
@@ -313,6 +323,7 @@ public class MyController implements Initializable {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
 			choiceCube.setVisible(false);
+			obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
 		} else {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
@@ -340,6 +351,7 @@ public class MyController implements Initializable {
 			bg_cylinder.setVisible(true);
 			horizontal_line.setVisible(true);
 			vertical_line.setVisible(true);
+			obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 		}
 		choiceCylinder.setTranslateX(0);
 		choiceCylinder.setTranslateY(0);
@@ -454,58 +466,37 @@ public class MyController implements Initializable {
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
 		double old_x;
-		if (obj instanceof Cube) {
-			old_x = cube.getX();
-			cube.proceed(elastedSecond);
-
-			//reset back to original position to prevent backgrounds run out of scene
-			//multiply by 50 to make the animation looks faster
-			if (ls1.getX() - (cube.getX() - old_x)*50 < -BACKGROUND_WIDTH) {
-				ls1.setX(0);
-				ls2.setX(0);
-			} else if (ls1.getX() - (cube.getX() - old_x)*40 > 0) {
-				ls1.setX(-BACKGROUND_WIDTH);
-				ls2.setX(-BACKGROUND_WIDTH);
-			} else {
-				ls1.setX(ls1.getX() - (cube.getX() - old_x)*40);
-				ls2.setX(ls2.getX() - (cube.getX() - old_x)*40);
-			}
-			if (bg1.getX() - (cube.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
-				bg1.setX(0);
-				bg2.setX(0);
-			} else if (bg1.getX() - (cube.getX() - old_x)*10 > 0) {
-				bg1.setX(-BACKGROUND_WIDTH);
-				bg2.setX(-BACKGROUND_WIDTH);
-			} else {
-				bg1.setX(bg1.getX() - (cube.getX() - old_x)*10);
-				bg2.setX(bg2.getX() - (cube.getX() - old_x)*10);
-			}
+		old_x = obj.getX();
+		obj.proceed(elastedSecond);
+		if (ls1.getX() - (obj.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
+			ls1.setX(0);
+			ls2.setX(0);
+		} else if (ls1.getX() - (obj.getX() - old_x)*40 > 0) {
+			ls1.setX(-BACKGROUND_WIDTH);
+			ls2.setX(-BACKGROUND_WIDTH);
 		} else {
-			old_x = cylinder.getX();
-			cylinder.proceed(elastedSecond);
-			if (ls1.getX() - (cylinder.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
-				ls1.setX(0);
-				ls2.setX(0);
-			} else if (ls1.getX() - (cylinder.getX() - old_x)*40 > 0) {
-				ls1.setX(-BACKGROUND_WIDTH);
-				ls2.setX(-BACKGROUND_WIDTH);
-			} else {
-				ls1.setX(ls1.getX() - (cylinder.getX() - old_x)*40);
-				ls2.setX(ls2.getX() - (cylinder.getX() - old_x)*40);
-			}
-			if (bg1.getX() - (cylinder.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
-				bg1.setX(0);
-				bg2.setX(0);
-			} else if (bg1.getX() - (cylinder.getX() - old_x)*10 > 0) {
-				bg1.setX(-BACKGROUND_WIDTH);
-				bg2.setX(-BACKGROUND_WIDTH);
-			} else {
-				bg1.setX(bg1.getX() - (cylinder.getX() - old_x)*10);
-				bg2.setX(bg2.getX() - (cylinder.getX() - old_x)*10);
-			}
+			ls1.setX(ls1.getX() - (obj.getX() - old_x)*40);
+			ls2.setX(ls2.getX() - (obj.getX() - old_x)*40);
+		}
+		if (bg1.getX() - (obj.getX() - old_x)*10 < -BACKGROUND_WIDTH) {
+			bg1.setX(0);
+			bg2.setX(0);
+		} else if (bg1.getX() - (obj.getX() - old_x)*10 > 0) {
+			bg1.setX(-BACKGROUND_WIDTH);
+			bg2.setX(-BACKGROUND_WIDTH);
+		} else {
+			bg1.setX(bg1.getX() - (obj.getX() - old_x)*10);
+			bg2.setX(bg2.getX() - (obj.getX() - old_x)*10);
+		}
+		
+		if (obj instanceof Cylinder) {
 			//multiply by 25 because the rotation is faster than transition
-			horizontal_line.setRotate(horizontal_line.getRotate() + (cylinder.getX() - old_x)*20);
-			vertical_line.setRotate(vertical_line.getRotate() + (cylinder.getX() - old_x)*20);
+			horizontal_line.setRotate(horizontal_line.getRotate() + (obj.getX() - old_x)*20);
+			vertical_line.setRotate(vertical_line.getRotate() + (obj.getX() - old_x)*20);
+		}
+		
+		if (obj.validateSpeedThreshold()) {
+			forceSlider.adjustValue(0.0);
 		}
 	}
 }
