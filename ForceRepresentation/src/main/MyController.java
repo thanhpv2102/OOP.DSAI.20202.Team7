@@ -205,25 +205,8 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		actorArrow.setVisible(false);
-//		normalArrow.setVisible(false);
-//		gravitationalArrow.setVisible(false);
-//		frictionalArrow.setVisible(false);		
-//		sumForceArrow.setVisible(false);
-//
-//		actorForceLabel.setVisible(false);
-//		normalForceLabel.setVisible(false);
-//		gravitationalForceLabel.setVisible(false);
-//		frictionalForceLabel.setVisible(false);
-//		sumForceLabel.setVisible(false);
-//		
-//		massDisplay.setVisible(false);
-//		bgCube.setVisible(false);
-//		bgCylinder.setVisible(false);
-		
 		
 		resetBtnPressed();
-		display(obj);
 		
 		//Alter static friction coef with staticSlider
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -233,7 +216,6 @@ public class MyController implements Initializable {
 					staticSlider.adjustValue(kineticSlider.getValue());
 				}
 				surface.setStaticFrictionCoef((double) staticSlider.getValue());
-				//			System.out.println("static:" + surface.getStaticFrictionCoef());
 			}
 		});
 
@@ -246,7 +228,6 @@ public class MyController implements Initializable {
 					kineticSlider.adjustValue(staticSlider.getValue());
 				}
 				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
-				//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
 			}
 		});
 		
@@ -288,6 +269,10 @@ public class MyController implements Initializable {
 		speedBox.setSelected(false);
 		accelerationBox.setSelected(false);
 		
+		parallaxAnimation.stop();
+		obj = null;
+		display(obj);
+		
 		//Why though
 		actorArrow.setVisible(false);
 		normalArrow.setVisible(false);
@@ -300,8 +285,6 @@ public class MyController implements Initializable {
 		frictionalForceLabel.setVisible(false);
 		sumForceLabel.setVisible(false);
 		
-		//Why though
-		massDisplay.setVisible(false);
 		bgCube.setVisible(false);
 		bgCylinder.setVisible(false);
 		
@@ -316,12 +299,13 @@ public class MyController implements Initializable {
 		forceSlider.adjustValue(0.0);
 		staticSlider.adjustValue(0.25);
 		kineticSlider.adjustValue(0.25);
-		parallaxAnimation.stop();
+		
 		bg1.setX(0);
 		bg2.setX(0);
 		ls1.setX(0);
 		ls2.setX(0);
-		obj = null;
+		
+		pauseButton.setText("Pause");
 	}
 
 	public void submitMass(ActionEvent event) {
