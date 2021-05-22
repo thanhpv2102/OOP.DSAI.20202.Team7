@@ -85,21 +85,22 @@
             <Font size="32.0" />
          </font>
       </Text>
-      <Rectangle fx:id="bg_cube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="192.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Rectangle fx:id="bgCube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="502.0" layoutY="192.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
       <Pane layoutX="848.0" layoutY="513.0" prefHeight="170.0" prefWidth="348.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
-            <TextField fx:id="input_mass" layoutX="193.0" layoutY="54.0" onAction="#submitMass" prefHeight="31.0" prefWidth="137.0" text="50.0" />
-            <TextField fx:id="input_sizeLength" layoutX="195.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="200.0" />
+            <TextField fx:id="inputMass" layoutX="193.0" layoutY="54.0" onAction="#submitMass" prefHeight="31.0" prefWidth="137.0" text="50.0" />
+            <TextField fx:id="inputSizeLength" layoutX="195.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="200.0" />
             <TextField fx:id="input_radius" layoutX="193.0" layoutY="118.0" prefHeight="31.0" prefWidth="137.0" text="100.0" visible="false" />
             <Text fill="#8be9fd" layoutX="195.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mass (kg):" />
             <Text fx:id="txt_radius" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Radius (pixels):" visible="false" />
-            <Text fx:id="txt_sizeLength" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size length (pixels):" />
-            <Button fx:id="pauseButton" layoutX="43.0" layoutY="70.0" mnemonicParsing="false" onAction="#pauseHandle" text="Pause" />
+            <Text fx:id="txtSizeLength" fill="#8be9fd" layoutX="193.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size length (pixels):" />
+            <Button fx:id="pauseButton" layoutX="43.0" layoutY="54.0" mnemonicParsing="false" onAction="#pauseHandle" text="Pause" />
+            <Button layoutX="44.0" layoutY="118.0" mnemonicParsing="false" onAction="#resetBtnPressed" text="Reset" />
          </children>
       </Pane>
-      <Circle fx:id="bg_cylinder" fill="#66e389e1" layoutX="600.0" layoutY="292.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-      <Line fx:id="horizontal_line" endX="100.0" layoutX="600.0" layoutY="292.0" startX="-100.0" visible="false" />
-      <Line fx:id="vertical_line" endX="0.0" endY="-100.0" layoutX="600.0" layoutY="292.0" startX="0.0" startY="100.0" visible="false" />
+      <Circle fx:id="bgCylinder" fill="#66e389e1" layoutX="600.0" layoutY="292.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
+      <Line fx:id="horizontalLine" endX="100.0" layoutX="600.0" layoutY="292.0" startX="-100.0" visible="false" />
+      <Line fx:id="verticalLine" endX="0.0" endY="-100.0" layoutX="600.0" layoutY="292.0" startX="0.0" startY="100.0" visible="false" />
       <Pane layoutY="3.0" prefHeight="495.0" prefWidth="277.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <Label layoutX="4.0" layoutY="55.0" textFill="#8be9fd" />

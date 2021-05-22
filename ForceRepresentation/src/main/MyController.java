@@ -52,6 +52,7 @@ public class MyController implements Initializable {
 	private ChangeableForce force = new ChangeableForce(0, 0, 0);
 	private Surface surface = new Surface(0.25, 0.25);
 	private final LongProperty lastUpdateAnimation = new SimpleLongProperty(0);
+	AnimationTimer parallaxAnimation = new ParallaxAnimation();
 	private ActedObject obj;
 
 	private double mass;
@@ -86,10 +87,10 @@ public class MyController implements Initializable {
 	private ImageView ls2;
 
 	@FXML
-	private Rectangle bg_cube;
+	private Rectangle bgCube;
 
 	@FXML
-	private Circle bg_cylinder;
+	private Circle bgCylinder;
 
 	@FXML
 	private RadioButton radio_cube;
@@ -100,25 +101,25 @@ public class MyController implements Initializable {
 	ToggleGroup group = new ToggleGroup();
 
 	@FXML
-	private TextField input_mass;
+	private TextField inputMass;
 
 	@FXML
 	private TextField input_radius;
 
 	@FXML
-	private TextField input_sizeLength;
+	private TextField inputSizeLength;
 
 	@FXML
 	private Text txt_radius;
 
 	@FXML
-	private Text txt_sizeLength;
+	private Text txtSizeLength;
 
 	@FXML
-	private Line horizontal_line;
+	private Line horizontalLine;
 
 	@FXML
-	private Line vertical_line;
+	private Line verticalLine;
 
 	@FXML
 	private TextArea sumForcesDisplay;
@@ -204,22 +205,27 @@ public class MyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		actorArrow.setVisible(false);
-		normalArrow.setVisible(false);
-		gravitationalArrow.setVisible(false);
-		frictionalArrow.setVisible(false);		
-		sumForceArrow.setVisible(false);
-
-		actorForceLabel.setVisible(false);
-		normalForceLabel.setVisible(false);
-		gravitationalForceLabel.setVisible(false);
-		frictionalForceLabel.setVisible(false);
-		sumForceLabel.setVisible(false);
-
+//		actorArrow.setVisible(false);
+//		normalArrow.setVisible(false);
+//		gravitationalArrow.setVisible(false);
+//		frictionalArrow.setVisible(false);		
+//		sumForceArrow.setVisible(false);
+//
+//		actorForceLabel.setVisible(false);
+//		normalForceLabel.setVisible(false);
+//		gravitationalForceLabel.setVisible(false);
+//		frictionalForceLabel.setVisible(false);
+//		sumForceLabel.setVisible(false);
+//		
+//		massDisplay.setVisible(false);
+//		bgCube.setVisible(false);
+//		bgCylinder.setVisible(false);
+		
+		
+		resetBtnPressed();
+		display(obj);
+		
 		//Alter static friction coef with staticSlider
-		massDisplay.setVisible(false);
-		bg_cube.setVisible(false);
-		bg_cylinder.setVisible(false);
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -233,7 +239,6 @@ public class MyController implements Initializable {
 
 		//Alter kinetic friction coef with kineticSlider
 		kineticSlider.valueProperty().addListener(new ChangeListener<Number>() {
-
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				// TODO Auto-generated method stub
@@ -243,7 +248,6 @@ public class MyController implements Initializable {
 				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
 				//			System.out.println("kinetic:" + surface.getKineticFrictionCoef());
 			}
-
 		});
 		
 		//the user can input applied force value in this text field
@@ -267,19 +271,64 @@ public class MyController implements Initializable {
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				force.setMagnitude(forceSlider.getValue());
 				forceValue.setText(String.valueOf(forceSlider.getValue()));
-				AnimationTimer parallaxAnimation = new ParallaxAnimation();
-				parallaxAnimation.start();
-					
+				if (obj != null) {
+					parallaxAnimation.start();	
+				}
 			}
 		});
 
 	}
+	
+	@FXML
+	private void resetBtnPressed() {
+		valuesBox.setSelected(false);
+		forcesBox.setSelected(false);
+		sumForcesBox.setSelected(false);
+		massBox.setSelected(false);
+		speedBox.setSelected(false);
+		accelerationBox.setSelected(false);
+		
+		//Why though
+		actorArrow.setVisible(false);
+		normalArrow.setVisible(false);
+		gravitationalArrow.setVisible(false);
+		frictionalArrow.setVisible(false);		
+		sumForceArrow.setVisible(false);
+		actorForceLabel.setVisible(false);
+		normalForceLabel.setVisible(false);
+		gravitationalForceLabel.setVisible(false);
+		frictionalForceLabel.setVisible(false);
+		sumForceLabel.setVisible(false);
+		
+		//Why though
+		massDisplay.setVisible(false);
+		bgCube.setVisible(false);
+		bgCylinder.setVisible(false);
+		
+		choiceCube.setVisible(true);
+		choiceCylinder.setVisible(true);
+		
+		horizontalLine.setRotate(0);
+		verticalLine.setRotate(0);
+		horizontalLine.setVisible(false);
+		verticalLine.setVisible(false);
+		
+		forceSlider.adjustValue(0.0);
+		staticSlider.adjustValue(0.25);
+		kineticSlider.adjustValue(0.25);
+		parallaxAnimation.stop();
+		bg1.setX(0);
+		bg2.setX(0);
+		ls1.setX(0);
+		ls2.setX(0);
+		obj = null;
+	}
 
 	public void submitMass(ActionEvent event) {
 		try {
-			mass = Double.parseDouble(input_mass.getText());
+			mass = Double.parseDouble(inputMass.getText());
 		} catch(Exception e) {
-			input_mass.setText("Please enter a number for the mass!");
+			inputMass.setText("Please enter a number for the mass!");
 		}
 	}
 	
@@ -290,20 +339,19 @@ public class MyController implements Initializable {
 			pauseButton.setText("Pause");
 
 		}
-
 	}
 
 	private class ParallaxAnimation extends AnimationTimer {
 		@Override
 		public void handle(long now) {
-			if (pauseButton.getText().equals("Pause")) {
-				if (lastUpdateAnimation.get() > 0) {
-					long elastedNanoSecond = now - lastUpdateAnimation.get();
+			if (lastUpdateAnimation.get() > 0) {
+				long elastedNanoSecond = now - lastUpdateAnimation.get();
+				if (pauseButton.getText().equals("Pause")) {
 					display(obj);
 					updateTransition(obj, elastedNanoSecond);
 				}
-				lastUpdateAnimation.set(now);
 			}
+			lastUpdateAnimation.set(now);
 		}
 	}
 
@@ -316,14 +364,15 @@ public class MyController implements Initializable {
 		if ( choiceCube.getTranslateY() < ( 400 - choiceCube.getLayoutY()) )   {
 			cylinderChosen = false;
 			cubeChosen = true;
-			bg_cylinder.setVisible(false);
-			horizontal_line.setVisible(false);
-			vertical_line.setVisible(false);
-			bg_cube.setVisible(true);
+			bgCylinder.setVisible(false);
+			horizontalLine.setVisible(false);
+			verticalLine.setVisible(false);
+			bgCube.setVisible(true);
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
 			choiceCube.setVisible(false);
-			obj = new Cube(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_sizeLength.getText()), force, surface);
+			obj = new Cube(Double.parseDouble(inputMass.getText()), Double.parseDouble(inputSizeLength.getText()), force, surface);
+			forceSlider.adjustValue(0.0);
 		} else {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
@@ -347,11 +396,12 @@ public class MyController implements Initializable {
 		if ( choiceCylinder.getTranslateY() < ( 400 - choiceCylinder.getLayoutY()) )   {
 			cylinderChosen = true;
 			cubeChosen = false;	
-			bg_cube.setVisible(false);
-			bg_cylinder.setVisible(true);
-			horizontal_line.setVisible(true);
-			vertical_line.setVisible(true);
-			obj = new Cylinder(Double.parseDouble(input_mass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+			bgCube.setVisible(false);
+			bgCylinder.setVisible(true);
+			horizontalLine.setVisible(true);
+			verticalLine.setVisible(true);
+			obj = new Cylinder(Double.parseDouble(inputMass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
+			forceSlider.adjustValue(0.0);
 		}
 		choiceCylinder.setTranslateX(0);
 		choiceCylinder.setTranslateY(0);
@@ -491,8 +541,8 @@ public class MyController implements Initializable {
 		
 		if (obj instanceof Cylinder) {
 			//multiply by 25 because the rotation is faster than transition
-			horizontal_line.setRotate(horizontal_line.getRotate() + (obj.getX() - old_x)*20);
-			vertical_line.setRotate(vertical_line.getRotate() + (obj.getX() - old_x)*20);
+			horizontalLine.setRotate(horizontalLine.getRotate() + (obj.getX() - old_x)*20);
+			verticalLine.setRotate(verticalLine.getRotate() + (obj.getX() - old_x)*20);
 		}
 		
 		if (obj.validateSpeedThreshold()) {
