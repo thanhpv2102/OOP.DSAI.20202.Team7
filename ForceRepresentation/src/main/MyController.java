@@ -7,6 +7,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -26,8 +27,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
@@ -40,11 +48,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 public class MyController implements Initializable {
@@ -99,21 +110,6 @@ public class MyController implements Initializable {
 	private RadioButton radio_cylinder;
 
 	ToggleGroup group = new ToggleGroup();
-
-	@FXML
-	private TextField inputMass;
-
-	@FXML
-	private TextField input_radius;
-
-	@FXML
-	private TextField inputSizeLength;
-
-	@FXML
-	private Text txt_radius;
-
-	@FXML
-	private Text txtSizeLength;
 
 	@FXML
 	private Line horizontalLine;
@@ -309,11 +305,11 @@ public class MyController implements Initializable {
 	}
 
 	public void submitMass(ActionEvent event) {
-		try {
-			mass = Double.parseDouble(inputMass.getText());
-		} catch(Exception e) {
-			inputMass.setText("Please enter a number for the mass!");
-		}
+//		try {
+//			mass = Double.parseDouble(inputMass.getText());
+//		} catch(Exception e) {
+//			inputMass.setText("Please enter a number for the mass!");
+//		}
 	}
 	
 	public void pauseHandle(ActionEvent event) {
@@ -355,8 +351,8 @@ public class MyController implements Initializable {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
 			choiceCube.setVisible(false);
-			obj = new Cube(Double.parseDouble(inputMass.getText()), Double.parseDouble(inputSizeLength.getText()), force, surface);
 			forceSlider.adjustValue(0.0);
+			showInputDialog("cube");
 		} else {
 			choiceCube.setTranslateX(0);
 			choiceCube.setTranslateY(0);
@@ -384,8 +380,8 @@ public class MyController implements Initializable {
 			bgCylinder.setVisible(true);
 			horizontalLine.setVisible(true);
 			verticalLine.setVisible(true);
-			obj = new Cylinder(Double.parseDouble(inputMass.getText()), Double.parseDouble(input_radius.getText()), force, surface);
 			forceSlider.adjustValue(0.0);
+			showInputDialog("cylinder");
 		}
 		choiceCylinder.setTranslateX(0);
 		choiceCylinder.setTranslateY(0);
@@ -533,4 +529,66 @@ public class MyController implements Initializable {
 			forceSlider.adjustValue(0.0);
 		}
 	}
+	
+	private void showInputDialog(String type) {
+		Dialog<String> dialog = new Dialog<>();
+		dialog.setTitle("Input object information");
+		dialog.setResizable(true);
+		
+		DialogPane pane = dialog.getDialogPane();
+		pane.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		pane.getStyleClass().add("inputDialog");
+		 
+		Label labelMass = new Label("Mass (kg): ");
+		Label labelSidelength = new Label("Side length (cm): ");
+		Label labelRadius = new Label("Radius (cm): ");
+		
+		labelMass.setTextFill(Paint.valueOf("#8be9fd"));
+		labelSidelength.setTextFill(Paint.valueOf("#8be9fd"));
+		labelRadius.setTextFill(Paint.valueOf("#8be9fd"));
+		
+		TextField txtMass = new TextField();
+		TextField txtLength = new TextField();
+		TextField txtRadius = new TextField();
+		
+		txtMass.setPromptText("50.0");
+		txtLength.setPromptText("200");
+		txtRadius.setPromptText("100");
+		         
+		GridPane grid = new GridPane();
+		grid.add(labelMass, 1, 1);
+		grid.add(txtMass, 2, 1);
+		
+		if (type.equals("cube")) {
+			grid.add(labelSidelength, 1, 2);
+			grid.add(txtLength, 2, 2);
+		} else if (type.equals("cylinder")) {
+			grid.add(labelRadius, 1, 2);
+			grid.add(txtRadius, 2, 2);
+		}
+		
+		
+		grid.setHgap(10); 
+		grid.setVgap(10);
+		grid.setPadding(new Insets(10, 10, 10, 10));
+		
+		pane.setContent(grid);
+		         
+		ButtonType btnConfirm = new ButtonType("Confirm", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().add(btnConfirm);
+		 
+		dialog.setResultConverter(new Callback<ButtonType, String>() {
+		    @Override
+		    public String call(ButtonType b) { 
+		        if (b == btnConfirm) {
+		        	if (type.equals("cube")) {
+		        		obj = new Cube(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtLength.getText()), force, surface);
+		        	} else if (type.equals("cylinder")) {
+		    			obj = new Cylinder(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtRadius.getText()), force, surface);
+		    		}
+		        }
+		        return null;
+		    }
+		});
+    }
 }
