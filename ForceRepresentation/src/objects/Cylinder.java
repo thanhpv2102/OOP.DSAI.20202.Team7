@@ -3,6 +3,8 @@ package objects;
 import force.*;
 import java.lang.Math;
 
+import exception.InvalidInputException;
+
 public class Cylinder extends ActedObject {
 	private double radius;
 	//Base direction: clock-wise
@@ -27,8 +29,11 @@ public class Cylinder extends ActedObject {
 		return angularAcceleration;
 	}
 	
-	public Cylinder(double mass, double radius, ChangeableForce actorForce, Surface surface) {
+	public Cylinder(double mass, double radius, ChangeableForce actorForce, Surface surface) throws InvalidInputException {
 		super(mass, 0, radius, actorForce, surface);
+		if (radius <= 0) {
+			throw new InvalidInputException("Radius of cylinder must be positive");
+		}
 		this.radius = radius;
 		// TODO Auto-generated constructor stub
 	}

@@ -4,22 +4,11 @@ import force.ChangeableForce;
 import objects.*;
 
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
-import javafx.animation.Animation;
+import exception.InvalidInputException;
 import javafx.animation.AnimationTimer;
-import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,8 +17,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -37,12 +24,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -54,9 +39,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.Duration;
 
 public class MyController implements Initializable {
 
@@ -81,7 +64,7 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Slider forceSlider;
-	
+
 	@FXML
 	private TextField forceValue;
 
@@ -164,46 +147,46 @@ public class MyController implements Initializable {
 
 	@FXML 
 	private Circle choiceCylinder;
-	
+
 	@FXML 
 	private SVGPath actorArrow;
-	
+
 	@FXML 
 	private SVGPath normalArrow;
-	
+
 	@FXML 
 	private SVGPath sumForceArrow;
-	
+
 	@FXML 
 	private SVGPath gravitationalArrow;
-	
+
 	@FXML 
 	private SVGPath frictionalArrow;
-	
+
 	@FXML 
 	private Label actorForceLabel;
-	
+
 	@FXML 
 	private Label normalForceLabel;
-	
+
 	@FXML 
 	private Label gravitationalForceLabel;
-	
+
 	@FXML 
 	private Label frictionalForceLabel;
-	
+
 	@FXML 
 	private Label sumForceLabel;
-	
+
 	@FXML
 	private Button pauseButton;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		resetBtnPressed();
-		
+
 		//Alter static friction coef with staticSlider
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
@@ -226,7 +209,7 @@ public class MyController implements Initializable {
 				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
 			}
 		});
-		
+
 		//the user can input applied force value in this text field
 		forceValue.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -255,7 +238,7 @@ public class MyController implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	private void resetBtnPressed() {
 		valuesBox.setSelected(false);
@@ -264,11 +247,11 @@ public class MyController implements Initializable {
 		massBox.setSelected(false);
 		speedBox.setSelected(false);
 		accelerationBox.setSelected(false);
-		
+
 		parallaxAnimation.stop();
 		obj = null;
 		display(obj);
-		
+
 		//Why though
 		actorArrow.setVisible(false);
 		normalArrow.setVisible(false);
@@ -280,38 +263,38 @@ public class MyController implements Initializable {
 		gravitationalForceLabel.setVisible(false);
 		frictionalForceLabel.setVisible(false);
 		sumForceLabel.setVisible(false);
-		
+
 		bgCube.setVisible(false);
 		bgCylinder.setVisible(false);
-		
+
 		choiceCube.setVisible(true);
 		choiceCylinder.setVisible(true);
-		
+
 		horizontalLine.setRotate(0);
 		verticalLine.setRotate(0);
 		horizontalLine.setVisible(false);
 		verticalLine.setVisible(false);
-		
+
 		forceSlider.adjustValue(0.0);
 		staticSlider.adjustValue(0.25);
 		kineticSlider.adjustValue(0.25);
-		
+
 		bg1.setX(0);
 		bg2.setX(0);
 		ls1.setX(0);
 		ls2.setX(0);
-		
+
 		pauseButton.setText("Pause");
 	}
 
 	public void submitMass(ActionEvent event) {
-//		try {
-//			mass = Double.parseDouble(inputMass.getText());
-//		} catch(Exception e) {
-//			inputMass.setText("Please enter a number for the mass!");
-//		}
+		//		try {
+		//			mass = Double.parseDouble(inputMass.getText());
+		//		} catch(Exception e) {
+		//			inputMass.setText("Please enter a number for the mass!");
+		//		}
 	}
-	
+
 	public void pauseHandle(ActionEvent event) {
 		if (pauseButton.getText().equals("Pause")) {
 			pauseButton.setText("Resume");
@@ -342,16 +325,6 @@ public class MyController implements Initializable {
 
 	public void cubeReleased(MouseEvent event) {
 		if ( choiceCube.getTranslateY() < ( 400 - choiceCube.getLayoutY()) )   {
-			cylinderChosen = false;
-			cubeChosen = true;
-			bgCylinder.setVisible(false);
-			horizontalLine.setVisible(false);
-			verticalLine.setVisible(false);
-			bgCube.setVisible(true);
-			choiceCube.setTranslateX(0);
-			choiceCube.setTranslateY(0);
-			choiceCube.setVisible(false);
-			forceSlider.adjustValue(0.0);
 			showInputDialog("cube");
 		} else {
 			choiceCube.setTranslateX(0);
@@ -374,17 +347,11 @@ public class MyController implements Initializable {
 
 	public void cylinderReleased(MouseEvent event) {
 		if ( choiceCylinder.getTranslateY() < ( 400 - choiceCylinder.getLayoutY()) )   {
-			cylinderChosen = true;
-			cubeChosen = false;	
-			bgCube.setVisible(false);
-			bgCylinder.setVisible(true);
-			horizontalLine.setVisible(true);
-			verticalLine.setVisible(true);
-			forceSlider.adjustValue(0.0);
 			showInputDialog("cylinder");
+		} else {
+			choiceCylinder.setTranslateX(0);
+			choiceCylinder.setTranslateY(0);
 		}
-		choiceCylinder.setTranslateX(0);
-		choiceCylinder.setTranslateY(0);
 		if (cubeChosen == true) {
 			choiceCylinder.setVisible( true);
 			choiceCube.setVisible(false);
@@ -405,8 +372,8 @@ public class MyController implements Initializable {
 			normalForceDisplay.setVisible(true);
 			frictionalForceDisplay.setVisible(true);
 			actorForceDisplay.setVisible(true);
-			
-			
+
+
 			actorArrow.setVisible(true);
 			normalArrow.setVisible(true);
 			gravitationalArrow.setVisible(true);
@@ -418,33 +385,33 @@ public class MyController implements Initializable {
 			gravitationalForceLabel.setVisible(true);
 			frictionalForceLabel.setVisible(true);
 			sumForceLabel.setVisible(true);
-			
+
 			actorArrow.setScaleX(object.getActorForceMagnitude() / actorArrow.boundsInLocalProperty().get().getWidth());
 			//actorArrow.setTranslateX(actorArrow.getTranslateX());
 			String roundedActor = String.format("%.2f", Math.abs(object.getActorForceMagnitude()) );
 			actorForceLabel.setText(roundedActor + " N");
-			
+
 			normalArrow.setScaleX(object.getNormalForceMagnitude() / normalArrow.boundsInLocalProperty().get().getWidth());
 			//normalArrow.setTranslateX(normalArrow.getTranslateX());
 			String roundedNormal = String.format("%.2f", Math.abs(object.getNormalForceMagnitude()));
 			normalForceLabel.setText(roundedNormal + " N");
-			
-			
+
+
 			frictionalArrow.setScaleX(object.getFrictionalForceMagnitude() / frictionalArrow.boundsInLocalProperty().get().getWidth());
-		    //frictionalArrow.setTranslateX(frictionalArrow.getTranslateX());
+			//frictionalArrow.setTranslateX(frictionalArrow.getTranslateX());
 			String roundedFriction = String.format("%.2f", object.getFrictionalForceMagnitude());
 			frictionalForceLabel.setText(roundedFriction + " N");
-			
+
 			gravitationalArrow.setScaleX(object.getNormalForceMagnitude() / gravitationalArrow.boundsInLocalProperty().get().getWidth());
 			//gravitationalArrow.setTranslateX(gravitationalArrow.getTranslateX());
 			String roundedGravitational = String.format("%.2f", Math.abs( object.getGravitationalForceMagnitude() ));
 			gravitationalForceLabel.setText(roundedGravitational + " N");
-			
+
 			sumForceArrow.setScaleX(object.getSumForce() / sumForceArrow.boundsInLocalProperty().get().getWidth());
 			//gravitationalArrow.setTranslateX(gravitationalArrow.getTranslateX());
 			String roundedSum = String.format("%.2f", Math.abs(object.getSumForce()));
 			sumForceLabel.setText(roundedSum + " N");
-		
+
 
 
 			gravitationalForceDisplay.setText(Double.toString( object.getGravitationalForceMagnitude() ) + " N");
@@ -518,47 +485,46 @@ public class MyController implements Initializable {
 			bg1.setX(bg1.getX() - (obj.getX() - old_x)*10);
 			bg2.setX(bg2.getX() - (obj.getX() - old_x)*10);
 		}
-		
+
 		if (obj instanceof Cylinder) {
 			//multiply by 25 because the rotation is faster than transition
 			horizontalLine.setRotate(horizontalLine.getRotate() + (obj.getX() - old_x)*20);
 			verticalLine.setRotate(verticalLine.getRotate() + (obj.getX() - old_x)*20);
 		}
-		
+
 		if (obj.validateSpeedThreshold()) {
 			forceSlider.adjustValue(0.0);
 		}
 	}
-	
+
 	private void showInputDialog(String type) {
 		Dialog<String> dialog = new Dialog<>();
 		dialog.setTitle("Input object information");
-		dialog.setResizable(true);
-		
+
 		DialogPane pane = dialog.getDialogPane();
 		pane.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		pane.getStyleClass().add("inputDialog");
-		 
+
 		Label labelMass = new Label("Mass (kg): ");
 		Label labelSidelength = new Label("Side length (cm): ");
 		Label labelRadius = new Label("Radius (cm): ");
-		
+
 		labelMass.setTextFill(Paint.valueOf("#8be9fd"));
 		labelSidelength.setTextFill(Paint.valueOf("#8be9fd"));
 		labelRadius.setTextFill(Paint.valueOf("#8be9fd"));
-		
+
 		TextField txtMass = new TextField();
 		TextField txtLength = new TextField();
 		TextField txtRadius = new TextField();
-		
+
 		txtMass.setPromptText("50.0");
 		txtLength.setPromptText("200");
 		txtRadius.setPromptText("100");
-		         
+
 		GridPane grid = new GridPane();
 		grid.add(labelMass, 1, 1);
 		grid.add(txtMass, 2, 1);
-		
+
 		if (type.equals("cube")) {
 			grid.add(labelSidelength, 1, 2);
 			grid.add(txtLength, 2, 2);
@@ -566,31 +532,67 @@ public class MyController implements Initializable {
 			grid.add(labelRadius, 1, 2);
 			grid.add(txtRadius, 2, 2);
 		}
-		
-		
+
+
 		grid.setHgap(10); 
 		grid.setVgap(10);
 		grid.setPadding(new Insets(10, 10, 10, 10));
-		
+
 		pane.setContent(grid);
-		         
+
 		ButtonType btnConfirm = new ButtonType("Confirm", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().add(btnConfirm);
-		 
+
 		dialog.setResultConverter(new Callback<ButtonType, String>() {
-		    @Override
-		    public String call(ButtonType b) { 
-		        if (b == btnConfirm) {
-		        	if (type.equals("cube")) {
-		        		obj = new Cube(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtLength.getText()), force, surface);
-		        	} else if (type.equals("cylinder")) {
-		    			obj = new Cylinder(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtRadius.getText()), force, surface);
-		    		}
-		        }
-		        return "";
-		    }
+			@Override
+			public String call(ButtonType b) { 
+				if (b == btnConfirm) {
+					try {
+						if (type.equals("cube")) {
+							cylinderChosen = false;
+							cubeChosen = true;
+							bgCylinder.setVisible(false);
+							bgCube.setVisible(true);
+							horizontalLine.setVisible(false);
+							verticalLine.setVisible(false);	
+							choiceCube.setVisible(false);
+							forceSlider.adjustValue(0.0);
+							obj = new Cube(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtLength.getText()), force, surface);
+						} else if (type.equals("cylinder")) {
+							cylinderChosen = true;
+							cubeChosen = false;	
+							bgCube.setVisible(false);
+							bgCylinder.setVisible(true);
+							horizontalLine.setVisible(true);
+							verticalLine.setVisible(true);
+							forceSlider.adjustValue(0.0);
+							obj = new Cylinder(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtRadius.getText()), force, surface);
+						}
+					} catch (NumberFormatException | InvalidInputException e) {
+						if (e instanceof NumberFormatException) {
+							Dialog<String> dialog = new Dialog<>();
+							dialog.setTitle("Exception");
+							
+							DialogPane pane = dialog.getDialogPane();
+							pane.getStylesheets().add(getClass().getResource("../main/application.css").toExternalForm());
+							pane.getStyleClass().add("inputDialog");
+							
+							Label error = new Label("Input error: Not a number");
+							error.setTextFill(Paint.valueOf("#8be9fd"));
+
+							pane.setContent(error);
+							         
+							ButtonType btnConfirm = new ButtonType("Ok", ButtonData.OK_DONE);
+							dialog.getDialogPane().getButtonTypes().add(btnConfirm);
+						
+							dialog.showAndWait();
+						}	
+					}
+				}
+				return null;
+			}
 		});
-		
+
 		dialog.showAndWait();
-    }
+	}
 }
