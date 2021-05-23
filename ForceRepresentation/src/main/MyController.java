@@ -191,7 +191,7 @@ public class MyController implements Initializable {
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				if (staticSlider.getValue() >= kineticSlider.getValue()) {
+				if (staticSlider.getValue() <= kineticSlider.getValue()) {
 					staticSlider.adjustValue(kineticSlider.getValue());
 				}
 				surface.setStaticFrictionCoef((double) staticSlider.getValue());
@@ -203,7 +203,7 @@ public class MyController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				// TODO Auto-generated method stub
-				if (kineticSlider.getValue() <= staticSlider.getValue()) {
+				if (kineticSlider.getValue() >= staticSlider.getValue()) {
 					kineticSlider.adjustValue(staticSlider.getValue());
 				}
 				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
