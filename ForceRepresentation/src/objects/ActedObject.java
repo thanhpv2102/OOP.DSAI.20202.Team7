@@ -1,5 +1,6 @@
 package objects;
 
+import exception.InvalidInputException;
 import force.*;
 
 public abstract class ActedObject {
@@ -37,10 +38,13 @@ public abstract class ActedObject {
 	}
 
 	
-	public ActedObject(double mass, double x, double y, ChangeableForce actorForce, Surface surface) {
+	public ActedObject(double mass, double x, double y, ChangeableForce actorForce, Surface surface) throws InvalidInputException {
 		//(x,y) is the coordinates of the center of the object
 		//Must specify the actor force and the surface related to the object
 		super();
+		if (mass <= 0) {
+			throw new InvalidInputException("Mass of object must be positive");
+		}
 		this.mass = mass;
 		this.x = x;
 		this.y = y;

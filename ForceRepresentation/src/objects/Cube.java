@@ -3,6 +3,8 @@ package objects;
 import force.*;
 import java.lang.Math;
 
+import exception.InvalidInputException;
+
 public class Cube extends ActedObject {
 	private double sideLength;
 	
@@ -11,8 +13,11 @@ public class Cube extends ActedObject {
 	}
 	
 	
-	public Cube(double mass, double sideLength, ChangeableForce actorForce, Surface surface) {
+	public Cube(double mass, double sideLength, ChangeableForce actorForce, Surface surface) throws InvalidInputException {
 		super(mass, 0, sideLength/2, actorForce, surface);
+		if (sideLength <= 0) {
+			throw new InvalidInputException("Side length of cube must be positive");
+		}
 		this.sideLength = sideLength;
 		// TODO Auto-generated constructor stub
 	}

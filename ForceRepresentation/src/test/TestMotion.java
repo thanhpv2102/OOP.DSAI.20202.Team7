@@ -2,6 +2,7 @@ package test;
 
 import java.util.Scanner;
 
+import exception.InvalidInputException;
 import force.ChangeableForce;
 import objects.ActedObject;
 import objects.Cube;
@@ -38,22 +39,25 @@ public class TestMotion {
 		System.out.println("Enter:");
 		
 		int typeObj = scanner.nextInt();
-		if (typeObj == 1) {
-			System.out.println("Enter cube side length:");
-			double sizeLength = scanner.nextDouble();
-			System.out.println("Enter object mass:");
-			double mass = scanner.nextDouble();
-			Cube cube = new Cube(mass, sizeLength, force, surface);
-			start(cube, force, surface);
-		} else if (typeObj == 2) {
-			System.out.println("Enter cyclinder radius:");
-			double radius = scanner.nextDouble();
-			System.out.println("Enter object mass:");
-			double mass = scanner.nextDouble();
-			Cylinder cyclinder = new Cylinder(mass, radius, force, surface);
-			start(cyclinder, force, surface);
+		try {
+			if (typeObj == 1) {
+				System.out.println("Enter cube side length:");
+				double sizeLength = scanner.nextDouble();
+				System.out.println("Enter object mass:");
+				double mass = scanner.nextDouble();
+				Cube cube = new Cube(mass, sizeLength, force, surface);
+				start(cube, force, surface);
+			} else if (typeObj == 2) {
+				System.out.println("Enter cyclinder radius:");
+				double radius = scanner.nextDouble();
+				System.out.println("Enter object mass:");
+				double mass = scanner.nextDouble();
+				Cylinder cyclinder = new Cylinder(mass, radius, force, surface);
+				start(cyclinder, force, surface);
+			}
+		} catch (InvalidInputException e) {
+			
 		}
-		
 	}
 	
 	public static void start(ActedObject obj, ChangeableForce force, Surface surface) {
