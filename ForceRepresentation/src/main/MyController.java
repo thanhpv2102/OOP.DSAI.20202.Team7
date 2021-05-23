@@ -326,10 +326,9 @@ public class MyController implements Initializable {
 	public void cubeReleased(MouseEvent event) {
 		if ( choiceCube.getTranslateY() < ( 400 - choiceCube.getLayoutY()) )   {
 			showInputDialog("cube");
-		} else {
-			choiceCube.setTranslateX(0);
-			choiceCube.setTranslateY(0);
-		}	
+		} 
+		choiceCube.setTranslateX(0);
+		choiceCube.setTranslateY(0);
 		if (cubeChosen == true) {
 			choiceCylinder.setVisible( true);
 			choiceCube.setVisible(false);
@@ -348,10 +347,9 @@ public class MyController implements Initializable {
 	public void cylinderReleased(MouseEvent event) {
 		if ( choiceCylinder.getTranslateY() < ( 400 - choiceCylinder.getLayoutY()) )   {
 			showInputDialog("cylinder");
-		} else {
-			choiceCylinder.setTranslateX(0);
-			choiceCylinder.setTranslateY(0);
-		}
+		} 
+		choiceCylinder.setTranslateX(0);
+		choiceCylinder.setTranslateY(0);
 		if (cubeChosen == true) {
 			choiceCylinder.setVisible( true);
 			choiceCube.setVisible(false);
@@ -549,42 +547,29 @@ public class MyController implements Initializable {
 				if (b == btnConfirm) {
 					try {
 						if (type.equals("cube")) {
-							cylinderChosen = false;
-							cubeChosen = true;
-							bgCylinder.setVisible(false);
-							bgCube.setVisible(true);
-							horizontalLine.setVisible(false);
-							verticalLine.setVisible(false);	
-							choiceCube.setVisible(false);
-							forceSlider.adjustValue(0.0);
 							obj = new Cube(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtLength.getText()), force, surface);
+							setBackgroundCube(Double.parseDouble(txtLength.getText()));
 						} else if (type.equals("cylinder")) {
-							cylinderChosen = true;
-							cubeChosen = false;	
-							bgCube.setVisible(false);
-							bgCylinder.setVisible(true);
-							horizontalLine.setVisible(true);
-							verticalLine.setVisible(true);
-							forceSlider.adjustValue(0.0);
 							obj = new Cylinder(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtRadius.getText()), force, surface);
+							setBackgroundCylinder(Double.parseDouble(txtRadius.getText()));
 						}
 					} catch (NumberFormatException | InvalidInputException e) {
 						if (e instanceof NumberFormatException) {
 							Dialog<String> dialog = new Dialog<>();
 							dialog.setTitle("Exception");
-							
+
 							DialogPane pane = dialog.getDialogPane();
 							pane.getStylesheets().add(getClass().getResource("../main/application.css").toExternalForm());
 							pane.getStyleClass().add("inputDialog");
-							
+
 							Label error = new Label("Input error: Not a number");
 							error.setTextFill(Paint.valueOf("#8be9fd"));
 
 							pane.setContent(error);
-							         
+
 							ButtonType btnConfirm = new ButtonType("Ok", ButtonData.OK_DONE);
 							dialog.getDialogPane().getButtonTypes().add(btnConfirm);
-						
+
 							dialog.showAndWait();
 						}	
 					}
@@ -594,5 +579,45 @@ public class MyController implements Initializable {
 		});
 
 		dialog.showAndWait();
+	}
+
+	public void setBackgroundCube(double sideLength) {
+		cylinderChosen = false;
+		cubeChosen = true;
+		bgCylinder.setVisible(false);
+
+		bgCube.setY(bgCube.getY() + (bgCube.getHeight() - sideLength));
+		bgCube.setLayoutX(bgCube.getLayoutX() + (bgCube.getWidth() - sideLength)/2);
+		bgCube.setHeight(sideLength);
+		bgCube.setWidth(sideLength);
+
+		bgCube.setVisible(true);
+		horizontalLine.setVisible(false);
+		verticalLine.setVisible(false);	
+		choiceCube.setVisible(false);
+		forceSlider.adjustValue(0.0);
+
+	}
+
+	public void setBackgroundCylinder(double radius) {
+		cylinderChosen = true;
+		cubeChosen = false;	
+		bgCube.setVisible(false);
+
+		bgCylinder.setCenterY(bgCylinder.getCenterY() + (bgCylinder.getRadius() - radius));
+		horizontalLine.setStartX(bgCylinder.getCenterX() - radius);
+		horizontalLine.setEndX(bgCylinder.getCenterX() + radius);
+		horizontalLine.setStartY(bgCylinder.getCenterY());
+		horizontalLine.setEndY(bgCylinder.getCenterY());
+		verticalLine.setStartX(bgCylinder.getCenterX());
+		verticalLine.setEndX(bgCylinder.getCenterX());
+		verticalLine.setStartY(bgCylinder.getCenterY() - radius);
+		verticalLine.setEndY(bgCylinder.getCenterY() + radius);
+		bgCylinder.setRadius(radius);
+
+		bgCylinder.setVisible(true);
+		horizontalLine.setVisible(true);
+		verticalLine.setVisible(true);
+		forceSlider.adjustValue(0.0);
 	}
 }
