@@ -587,8 +587,10 @@ public class MyController implements Initializable {
 		    			obj = new Cylinder(Double.parseDouble(txtMass.getText()), Double.parseDouble(txtRadius.getText()), force, surface);
 		    		}
 		        }
-		        return null;
+		        return "";
 		    }
 		});
+		
+		dialog.showAndWait();
     }
 }
