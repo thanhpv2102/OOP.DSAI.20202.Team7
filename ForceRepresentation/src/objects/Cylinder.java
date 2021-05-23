@@ -7,6 +7,7 @@ import exception.InvalidInputException;
 
 public class Cylinder extends ActedObject {
 	private double radius;
+	private static final double MAX_RADIUS = 30.0;
 	//Base direction: clock-wise
 	private double angularPosition;
 	private double angularVelocity;
@@ -33,6 +34,8 @@ public class Cylinder extends ActedObject {
 		super(mass, 0, radius, actorForce, surface);
 		if (radius <= 0) {
 			throw new InvalidInputException("Radius of cylinder must be positive");
+		} else if (radius > MAX_RADIUS) {
+			throw new InvalidInputException("Maximum radius is 30m");
 		}
 		this.radius = radius;
 		// TODO Auto-generated constructor stub
