@@ -504,8 +504,8 @@ public class MyController implements Initializable {
 		pane.getStyleClass().add("inputDialog");
 
 		Label labelMass = new Label("Mass (kg): ");
-		Label labelSidelength = new Label("Side length (cm): ");
-		Label labelRadius = new Label("Radius (cm): ");
+		Label labelSidelength = new Label("Side length (m): ");
+		Label labelRadius = new Label("Radius (m): ");
 
 		labelMass.setTextFill(Paint.valueOf("#8be9fd"));
 		labelSidelength.setTextFill(Paint.valueOf("#8be9fd"));
@@ -516,8 +516,8 @@ public class MyController implements Initializable {
 		TextField txtRadius = new TextField();
 
 		txtMass.setPromptText("50.0");
-		txtLength.setPromptText("200");
-		txtRadius.setPromptText("100");
+		txtLength.setPromptText("35");
+		txtRadius.setPromptText("15");
 
 		GridPane grid = new GridPane();
 		grid.add(labelMass, 1, 1);
@@ -586,10 +586,11 @@ public class MyController implements Initializable {
 		cubeChosen = true;
 		bgCylinder.setVisible(false);
 
-		bgCube.setY(bgCube.getY() + (bgCube.getHeight() - sideLength));
-		bgCube.setLayoutX(bgCube.getLayoutX() + (bgCube.getWidth() - sideLength)/2);
-		bgCube.setHeight(sideLength);
-		bgCube.setWidth(sideLength);
+		//this side length or radius * 5 is just to make it looks better on screen
+		bgCube.setY(bgCube.getY() + (bgCube.getHeight() - sideLength*5));
+		bgCube.setLayoutX(bgCube.getLayoutX() + (bgCube.getWidth() - sideLength*5)/2);
+		bgCube.setHeight(sideLength*5);
+		bgCube.setWidth(sideLength*5);
 
 		bgCube.setVisible(true);
 		horizontalLine.setVisible(false);
@@ -604,16 +605,17 @@ public class MyController implements Initializable {
 		cubeChosen = false;	
 		bgCube.setVisible(false);
 
-		bgCylinder.setCenterY(bgCylinder.getCenterY() + (bgCylinder.getRadius() - radius));
-		horizontalLine.setStartX(bgCylinder.getCenterX() - radius);
-		horizontalLine.setEndX(bgCylinder.getCenterX() + radius);
+		//change lines too :D
+		bgCylinder.setCenterY(bgCylinder.getCenterY() + (bgCylinder.getRadius() - radius*5));
+		horizontalLine.setStartX(bgCylinder.getCenterX() - radius*5);
+		horizontalLine.setEndX(bgCylinder.getCenterX() + radius*5);
 		horizontalLine.setStartY(bgCylinder.getCenterY());
 		horizontalLine.setEndY(bgCylinder.getCenterY());
 		verticalLine.setStartX(bgCylinder.getCenterX());
 		verticalLine.setEndX(bgCylinder.getCenterX());
-		verticalLine.setStartY(bgCylinder.getCenterY() - radius);
-		verticalLine.setEndY(bgCylinder.getCenterY() + radius);
-		bgCylinder.setRadius(radius);
+		verticalLine.setStartY(bgCylinder.getCenterY() - radius*5);
+		verticalLine.setEndY(bgCylinder.getCenterY() + radius*5);
+		bgCylinder.setRadius(radius*5);
 
 		bgCylinder.setVisible(true);
 		horizontalLine.setVisible(true);
