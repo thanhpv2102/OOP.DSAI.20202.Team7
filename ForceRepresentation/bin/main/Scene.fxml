@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane prefHeight="724.0" prefWidth="1219.0" style="-fx-background-color: #191A21;" stylesheets="@./application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
+<Pane prefHeight="721.0" prefWidth="1375.0" style="-fx-background-color: #191A21;" stylesheets="@./application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.MyController">
    <children>
       <ImageView fx:id="ls1" fitHeight="925.0" fitWidth="1653.0" layoutX="-18.0" layoutY="-433.0" pickOnBounds="true" preserveRatio="false">
          <image>
@@ -39,17 +39,17 @@
             <Font size="32.0" />
          </font>
       </Text>
-      <Rectangle fx:id="bgCube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="534.0" layoutY="192.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-      <Pane layoutX="848.0" layoutY="513.0" prefHeight="170.0" prefWidth="348.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <Rectangle fx:id="bgCube" arcHeight="5.0" arcWidth="5.0" fill="#64e388e3" height="200.0" layoutX="535.0" layoutY="193.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <Pane layoutX="1027.0" layoutY="553.0" prefHeight="170.0" prefWidth="348.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <Button fx:id="pauseButton" layoutX="43.0" layoutY="54.0" mnemonicParsing="false" onAction="#pauseHandle" text="Pause" />
             <Button layoutX="44.0" layoutY="118.0" mnemonicParsing="false" onAction="#resetBtnPressed" text="Reset" />
          </children>
       </Pane>
-      <Circle fx:id="bgCylinder" fill="#66e389e1" layoutX="634.0" layoutY="292.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" visible="false" />
-      <Line fx:id="horizontalLine" endX="100.0" layoutX="634.0" layoutY="292.0" startX="-100.0" visible="false" />
-      <Line fx:id="verticalLine" endX="0.0" endY="-100.0" layoutX="634.0" layoutY="292.0" startX="0.0" startY="100.0" visible="false" />
-      <Pane layoutY="3.0" prefHeight="495.0" prefWidth="277.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <Circle fx:id="bgCylinder" fill="#66e389e1" layoutX="634.0" layoutY="292.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+      <Line fx:id="horizontalLine" endX="100.0" layoutX="634.0" layoutY="292.0" startX="-100.0" />
+      <Line fx:id="verticalLine" endX="0.0" endY="-100.0" layoutX="634.0" layoutY="292.0" startX="0.0" startY="100.0" />
+      <Pane layoutY="3.0" prefHeight="470.0" prefWidth="277.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <Label layoutX="4.0" layoutY="55.0" textFill="#8be9fd" />
             <Label layoutX="81.0" layoutY="91.0" textFill="#8be9fd">
@@ -58,51 +58,43 @@
                </font>
             </Label>
             <Label layoutX="7.0" layoutY="118.0" textFill="#8be9fd" />
-            <Label layoutX="77.0" layoutY="14.0" text="Sum of Forces" textFill="#8be9fd">
+            <Label layoutX="107.0" layoutY="39.0" text="Speed" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="75.0" layoutY="157.0" text="Normal Force" textFill="#8be9fd">
+            <Label layoutX="54.0" layoutY="332.0" text="Angular Accleration" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="68.0" layoutY="220.0" text="Frictional Force" textFill="#8be9fd">
+            <TextField fx:id="speedDisplay" alignment="CENTER" editable="false" layoutX="23.0" layoutY="89.0" prefHeight="20.0" prefWidth="232.0" />
+            <TextField fx:id="angularAccelerationDisplay" alignment="CENTER" editable="false" layoutX="23.0" layoutY="376.0" prefHeight="31.0" prefWidth="232.0" />
+            <TextField fx:id="angularSpeedDisplay" alignment="CENTER" editable="false" layoutX="22.0" layoutY="196.0" prefHeight="20.0" prefWidth="232.0" />
+            <Label layoutX="80.0" layoutY="147.0" text="Angular Speed" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="83.0" layoutY="279.0" text="Actor Force" textFill="#8be9fd">
+            <Label layoutX="80.0" layoutY="198.0" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="108.0" layoutY="348.0" text="Speed" textFill="#8be9fd">
+            <TextField fx:id="accelerationDisplay" alignment="CENTER" editable="false" layoutX="22.0" layoutY="277.0" prefHeight="20.0" prefWidth="232.0" />
+            <Label layoutX="89.0" layoutY="241.0" text="Acceleration" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextArea fx:id="sumForcesDisplay" editable="false" layoutX="19.0" layoutY="54.0" prefHeight="24.0" prefWidth="232.0" />
-            <TextArea fx:id="gravitationalForceDisplay" editable="false" layoutX="19.0" layoutY="127.0" prefHeight="24.0" prefWidth="232.0" />
-            <TextArea fx:id="normalForceDisplay" editable="false" layoutX="19.0" layoutY="190.0" prefHeight="24.0" prefWidth="232.0" />
-            <TextArea fx:id="frictionalForceDisplay" editable="false" layoutX="18.0" layoutY="253.0" prefHeight="24.0" prefWidth="232.0" />
-            <TextArea fx:id="actorForceDisplay" editable="false" layoutX="19.0" layoutY="310.0" prefHeight="24.0" prefWidth="232.0" />
-            <Label layoutX="62.0" layoutY="91.0" text="Gravitational Force" textFill="#8be9fd">
+            <Label layoutX="80.0" layoutY="279.0" textFill="#8be9fd">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="83.0" layoutY="422.0" text="Acceleration" textFill="#8be9fd">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="speedDisplay" alignment="CENTER" editable="false" layoutX="23.0" layoutY="383.0" prefHeight="20.0" prefWidth="232.0" />
-            <TextField fx:id="accelerationDisplay" alignment="CENTER" editable="false" layoutX="23.0" layoutY="457.0" prefHeight="31.0" prefWidth="232.0" />
          </children>
       </Pane>
-      <TextField fx:id="massDisplay" alignment="CENTER" layoutX="544.0" layoutY="400.0" prefHeight="31.0" prefWidth="112.0">
+      <TextField fx:id="massDisplay" alignment="CENTER" layoutX="579.0" layoutY="407.0" prefHeight="31.0" prefWidth="112.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -119,37 +111,18 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <SVGPath fx:id="actorArrow" content="M80 40 H200 V20 L250 60  L200 100 V80 H80 Z" fill="#427eb2" layoutX="552.0" layoutY="233.0" />
-      <Label fx:id="actorForceLabel" layoutX="677.0" layoutY="278.0" text="actor">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <SVGPath fx:id="frictionalArrow" content="M80 40 H200 V20 L250 60  L200 100 V80 H80 Z" fill="#b04343" layoutX="318.0" layoutY="232.0" rotate="180.0" />
-      <Label fx:id="frictionalForceLabel" layoutX="469.0" layoutY="277.0" text="frictional">
+      <Label fx:id="normalForceLabel" layoutX="541.0" layoutY="-214.0" rotate="270.0" text="Normal">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <SVGPath fx:id="sumForceArrow" content="M80 40 H200 V20 L250 60  L200 100 V80 H80 Z" fill="#b0458a" layoutX="552.0" layoutY="165.0" />
-      <SVGPath fx:id="gravitationalArrow" content="M80 40 H200 V20 L250 60  L200 100 V80 H80 Z" fill="#a7b045" layoutX="435.0" layoutY="340.0" opacity="0.43" rotate="90.0" />
-      <SVGPath fx:id="normalArrow" content="M80 40 H200 V20 L250 60  L200 100 V80 H80 Z" fill="#a7b045" layoutX="435.0" layoutY="132.0" rotate="270.0" />
-      <Label fx:id="normalForceLabel" layoutX="567.0" layoutY="184.0" rotate="270.0" text="Normal">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="gravitationalForceLabel" layoutX="544.0" layoutY="356.0" opacity="0.49" rotate="90.0" text="Gravitational">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="sumForceLabel" layoutX="655.0" layoutY="210.0" text="Sum of Forces">
+      <Label fx:id="gravitationalForceLabel" layoutX="262.0" layoutY="-78.0" opacity="0.49" rotate="90.0" text="Gravitational">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
       <TextField fx:id="forceValue" alignment="CENTER" layoutX="538.0" layoutY="644.0" />
-      <Pane layoutX="870.0" layoutY="23.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
+      <Pane layoutX="1064.0" layoutY="4.0" prefHeight="403.0" prefWidth="304.0" style="-fx-background-color: #282A36; -fx-background-radius: 10px;">
          <children>
             <CheckBox fx:id="forcesBox" layoutX="28.0" layoutY="21.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="165.0" text="Forces" textFill="#8be9fd">
                <font>
@@ -193,6 +166,63 @@
                   <Font size="18.0" />
                </font>
             </CheckBox>
+         </children>
+      </Pane>
+      <ImageView fx:id="actorArrow" fitHeight="89.0" fitWidth="348.0" layoutX="460.0" layoutY="250.0" opacity="0.43">
+         <image>
+            <Image url="@../image/ArrowBlue%20(2).png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="sumForceArrow" fitHeight="80.0" fitWidth="326.0" layoutX="472.0" layoutY="106.0" opacity="0.59">
+         <image>
+            <Image url="@../image/ArrowRed-export.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="frictionalArrow" fitHeight="89.0" fitWidth="348.0" layoutX="460.0" layoutY="251.0" opacity="0.45" rotate="180.0">
+         <image>
+            <Image url="@../image/ArrowWhite%20(1).png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="frictionPane" layoutX="289.0" layoutY="264.0" prefHeight="56.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="frictionalForceLabel" layoutX="75.0" layoutY="25.0" text="0.0N" textFill="#3e9194">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="frictionalForceLabel1" layoutX="19.0" text="Frictional Force" textFill="#3e9194">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="actorPane" layoutX="820.0" layoutY="267.0" prefHeight="56.0" prefWidth="140.0">
+         <children>
+            <Label fx:id="actorForceLabel" layoutX="41.0" layoutY="27.0" text="actor" textFill="#3e9194">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="9.0" text="Actor Force" textFill="#3e9194">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="sumForcePane" layoutX="797.0" layoutY="101.0" prefHeight="89.0" prefWidth="186.0">
+         <children>
+            <Label fx:id="sumForceLabel" layoutX="74.0" layoutY="45.0" text="sum" textFill="#088e1e">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="31.0" layoutY="14.0" text="Sum of Forces" textFill="#088e1e">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>
