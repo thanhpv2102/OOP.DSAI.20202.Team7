@@ -489,8 +489,8 @@ public class MyController implements Initializable {
 		}
 
 		if (obj instanceof Cylinder) {
-			horizontalLine.setRotate(horizontalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*7);
-			verticalLine.setRotate(verticalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*7);
+			horizontalLine.setRotate(horizontalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
+			verticalLine.setRotate(verticalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
 		}
 
 		if (obj.validateSpeedThreshold()) {
