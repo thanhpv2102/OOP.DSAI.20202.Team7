@@ -461,6 +461,10 @@ public class MyController implements Initializable {
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
 		double old_x;
+		double oldAngularPos = 0;
+		if (obj instanceof Cylinder) {
+			oldAngularPos = ((Cylinder) obj).getAngularPosition();
+		}
 		old_x = obj.getX();
 		obj.proceed(elastedSecond);
 		if (ls1.getX() - (obj.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
@@ -485,9 +489,8 @@ public class MyController implements Initializable {
 		}
 
 		if (obj instanceof Cylinder) {
-			//multiply by 25 because the rotation is faster than transition
-			horizontalLine.setRotate(horizontalLine.getRotate() + (obj.getX() - old_x)*20);
-			verticalLine.setRotate(verticalLine.getRotate() + (obj.getX() - old_x)*20);
+			horizontalLine.setRotate(horizontalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
+			verticalLine.setRotate(verticalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
 		}
 
 		if (obj.validateSpeedThreshold()) {
