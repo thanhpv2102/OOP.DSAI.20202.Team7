@@ -41,12 +41,12 @@ public class Cylinder extends ActedObject {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
+	//Assume rolling without slipping
 	public void updateFrictionalForce() {
 		double magnitude;
-		if ( Math.abs(this.actorForce.getMagnitude()) <= 3 * Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() 
-			&& this.getVelocity() == 0) {
-			magnitude = Math.abs(this.actorForce.getMagnitude()) / 3;
+		if ( Math.abs(this.actorForce.getMagnitude()) <= Math.abs(this.normalForce.getMagnitude()) * this.surface.getStaticFrictionCoef() 
+			&& Math.abs(this.getVelocity()) <= 0.01) {
+			magnitude = Math.abs(this.actorForce.getMagnitude());
 		} else {
 			magnitude = Math.abs(this.normalForce.getMagnitude() * this.surface.getKineticFrictionCoef());
 		}
@@ -58,9 +58,10 @@ public class Cylinder extends ActedObject {
 		}
 	}
 	
+	
 	//Update angular acceleration
 	public void updateAngularAcceleration() {
-		this.angularAcceleration = 2 * this.frictionalForce.getMagnitude() / (this.getMass() * this.radius * this.radius);
+		this.angularAcceleration = this.getAcceleration()/this.radius;
 	}
 	
 	public void updateAngularVelocity(double deltaT) {
