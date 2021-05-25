@@ -287,14 +287,14 @@ public class MyController implements Initializable {
 		ls1.setX(0);
 		ls2.setX(0);
 
-		pauseButton.setText("Pause");
+		pauseButton.setText("PAUSE");
 	}
 
 	public void pauseHandle(ActionEvent event) {
-		if (pauseButton.getText().equals("Pause")) {
-			pauseButton.setText("Resume");
-		} else if (pauseButton.getText().equals("Resume")) {
-			pauseButton.setText("Pause");
+		if (pauseButton.getText().equals("PAUSE")) {
+			pauseButton.setText("RESUME");
+		} else if (pauseButton.getText().equals("RESUME")) {
+			pauseButton.setText("PAUSE");
 
 		}
 	}
@@ -304,7 +304,7 @@ public class MyController implements Initializable {
 		public void handle(long now) {
 			if (lastUpdateAnimation.get() > 0) {
 				long elastedNanoSecond = now - lastUpdateAnimation.get();
-				if (pauseButton.getText().equals("Pause")) {
+				if (pauseButton.getText().equals("PAUSE")) {
 					display(obj);
 					updateTransition(obj, elastedNanoSecond);
 				}
@@ -428,7 +428,7 @@ public class MyController implements Initializable {
 				frictionalArrow.setScaleY(2*((Cylinder) object).getRadius() / frictionalArrow.boundsInLocalProperty().get().getHeight());
 				sumForceArrow.setScaleY(2*((Cylinder) object).getRadius() / sumForceArrow.boundsInLocalProperty().get().getHeight());
 			}
-			String roundedActor = String.format("%.2f", Math.abs(object.getActorForceMagnitude()) );
+			String roundedActor = String.format("%.2f", object.getActorForceMagnitude());
 			actorForceLabel.setText(roundedActor + " N");
 
 
@@ -497,9 +497,6 @@ public class MyController implements Initializable {
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularVelocity());
 				angularSpeedDisplay.setText(roundedAngular + " rad/s");
 			}	
-		} else {
-			speedDisplay.setVisible(false);
-			angularSpeedDisplay.setVisible(false);
 		}
 		if (accelerationBox.isSelected() == true) {
 			accelerationDisplay.setVisible(true);
@@ -510,10 +507,6 @@ public class MyController implements Initializable {
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularAcceleration());
 				angularAccelerationDisplay.setText(roundedAngular + " rad/s\u00b2");
 			}
-
-		} else {
-			accelerationDisplay.setVisible(false);
-			angularAccelerationDisplay.setVisible(false);
 
 		}
 	}
