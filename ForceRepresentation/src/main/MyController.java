@@ -460,7 +460,7 @@ public class MyController implements Initializable {
 				sumForcePane.setTranslateY(- (bgCylinder.getRadius() - 100) + 50);
 			}
 
-			String roundedSum = String.format("%.2f", Math.abs(object.getSumForce()));
+			String roundedSum = String.format("%.2f", object.getSumForce());
 			sumForceLabel.setText(roundedSum + " N");
 
 		} else {
