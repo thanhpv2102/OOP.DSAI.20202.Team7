@@ -107,10 +107,10 @@ public class MyController implements Initializable {
 	private TextField angularSpeedDisplay;
 	@FXML
 	private TextField massDisplay;
-	
+
 	@FXML
 	private TextField angularAccelerationDisplay;
-	
+
 	@FXML
 	private TextField speedDisplay;
 
@@ -159,36 +159,32 @@ public class MyController implements Initializable {
 
 	@FXML
 	private Button pauseButton;
-	
+
 	@FXML
 	private ImageView whiteactor;
-	
+
 	@FXML
 	private ImageView actorArrow;
-	
+
 	@FXML
 	private ImageView frictionalArrow;
-	
+
 	@FXML
 	private ImageView sumForceArrow;
-	
+
 	@FXML
 	private Pane actorPane;
-	
+
 	@FXML
 	private Pane frictionPane;
-	
+
 	@FXML
 	private Pane sumForcePane;
-	
-	
-
-
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		resetBtnPressed();
-				//Alter static friction coef with staticSlider
+		//Alter static friction coef with staticSlider
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
@@ -237,7 +233,6 @@ public class MyController implements Initializable {
 				}
 			}
 		});
-
 	}
 
 	@FXML
@@ -249,8 +244,8 @@ public class MyController implements Initializable {
 		massBox.setSelected(false);
 		speedBox.setSelected(false);
 		accelerationBox.setSelected(false);
-		
-		
+
+
 		frictionPane.setVisible(false);
 		actorPane.setVisible(false);
 		sumForcePane.setVisible(false);
@@ -293,14 +288,6 @@ public class MyController implements Initializable {
 		ls2.setX(0);
 
 		pauseButton.setText("Pause");
-	}
-
-	public void submitMass(ActionEvent event) {
-		//		try {
-		//			mass = Double.parseDouble(inputMass.getText());
-		//		} catch(Exception e) {
-		//			inputMass.setText("Please enter a number for the mass!");
-		//		}
 	}
 
 	public void pauseHandle(ActionEvent event) {
@@ -367,9 +354,9 @@ public class MyController implements Initializable {
 			choiceCylinder.setVisible( false);
 		}
 	}
-	
+
 	public void scaling(double magnitude, ImageView arrow, Pane forcePane) {
-		
+
 		double widthRatio = magnitude / arrow.boundsInLocalProperty().get().getWidth();
 
 		if (magnitude >= 0) {
@@ -382,9 +369,9 @@ public class MyController implements Initializable {
 		}
 		arrow.setScaleX(widthRatio);
 	}
-	
-public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane) {
-		
+
+	public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane) {
+
 		double widthRatio = magnitude / arrow.boundsInLocalProperty().get().getWidth();
 
 		if (magnitude > 0) {
@@ -401,8 +388,7 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 	public void display(ActedObject object) {
 		//Phần lực phải hiện thị bằng mũi tên, nên sẽ thay thế sau
 
-		if (forcesBox.isSelected() == true) {
-		
+		if (forcesBox.isSelected() == true) {	
 			frictionPane.setVisible(true);
 			actorPane.setVisible(true);
 			actorArrow.setVisible(true);
@@ -419,56 +405,39 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 			scaling(object.getActorForceMagnitude(), actorArrow, actorPane);
 			frictionalscaling(object.getFrictionalForceMagnitude(), frictionalArrow, frictionPane);
 
-
-
 			if (cubeChosen == true) {
-			    actorArrow.setTranslateY(- (bgCube.getHeight() - 200)/2);
-			    frictionalArrow.setTranslateY(- (bgCube.getHeight() - 200)/2 );
-			    frictionalArrow.setX(actorArrow.getX());
+				actorArrow.setTranslateY(- (bgCube.getHeight() - 200)/2);
+				frictionalArrow.setTranslateY(- (bgCube.getHeight() - 200)/2 );
+				frictionalArrow.setX(actorArrow.getX());
 
 				actorPane.setTranslateY(- (bgCube.getHeight() - 200)/2);
 				frictionPane.setTranslateY(- (bgCube.getHeight() - 200)/2  + 50);
-				
+
 				actorArrow.setScaleY(2*((Cube) object).getSideLength() / actorArrow.boundsInLocalProperty().get().getHeight());
 				frictionalArrow.setScaleY(2*((Cube) object).getSideLength() / actorArrow.boundsInLocalProperty().get().getHeight());
 				sumForceArrow.setScaleY(2*((Cube) object).getSideLength() / actorArrow.boundsInLocalProperty().get().getHeight());
-
-				
-				
-				
 			} else if (cylinderChosen == true) {
 				actorArrow.setTranslateY(- (bgCylinder.getRadius() - 100));
 				frictionalArrow.setTranslateY(- (bgCylinder.getRadius() - 100));
-			    frictionalArrow.setX(actorArrow.getX());
+				frictionalArrow.setX(actorArrow.getX());
 
 				actorPane.setTranslateY(- (bgCylinder.getRadius() - 100));
 				frictionPane.setTranslateY(- (bgCylinder.getRadius() - 100) + 50);
-				
+
 				actorArrow.setScaleY(2*((Cylinder) object).getRadius() / actorArrow.boundsInLocalProperty().get().getHeight());
 				frictionalArrow.setScaleY(2*((Cylinder) object).getRadius() / frictionalArrow.boundsInLocalProperty().get().getHeight());
 				sumForceArrow.setScaleY(2*((Cylinder) object).getRadius() / sumForceArrow.boundsInLocalProperty().get().getHeight());
-
-			
-
-
 			}
 			String roundedActor = String.format("%.2f", Math.abs(object.getActorForceMagnitude()) );
 			actorForceLabel.setText(roundedActor + " N");
-			System.out.println(bgCube.getWidth());
-			System.out.println(bgCube.getHeight());
 
-			
+
 			//frictionalArrow.setTranslateX(frictionalArrow.getTranslateX());
 			String roundedFriction = String.format("%.2f", object.getFrictionalForceMagnitude());
 			frictionalForceLabel.setText(roundedFriction + " N");
 
-		
-			
-
-
-
 		} else {
-			
+
 			actorArrow.setVisible(false);
 			actorPane.setVisible(false);
 			//normalArrow.setVisible(false);
@@ -476,7 +445,6 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 			frictionalArrow.setVisible(false);	
 			frictionPane.setVisible(false);
 
-		
 		}
 
 		if (sumForcesBox.isSelected() == true) {
@@ -485,26 +453,21 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 
 			scaling(object.getSumForce(), sumForceArrow,sumForcePane);
 			if (cubeChosen == true) {
-				 sumForceArrow.setTranslateY(- (bgCube.getHeight() - 200)/2);
-				 sumForcePane.setTranslateY(- (bgCube.getHeight() - 200)/2);
+				sumForceArrow.setTranslateY(- (bgCube.getHeight() - 200)/2);
+				sumForcePane.setTranslateY(- (bgCube.getHeight() - 200)/2);
 			} else {
 				sumForceArrow.setTranslateY(- (bgCylinder.getRadius() - 100) + 50);
 				sumForcePane.setTranslateY(- (bgCylinder.getRadius() - 100) + 50);
 			}
-		   
-			
-			
+
 			String roundedSum = String.format("%.2f", Math.abs(object.getSumForce()));
 			sumForceLabel.setText(roundedSum + " N");
-
-
 
 		} else {
 			sumForceArrow.setVisible(false);
 			sumForcePane.setVisible(false);
 
-		}
-		
+		}	
 		if (valuesBox.isSelected() == true) {
 			if (forcesBox.isSelected() == true) {
 				actorForceLabel.setVisible(true);
@@ -517,16 +480,13 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 			actorForceLabel.setVisible(false);
 			frictionalForceLabel.setVisible(false);
 			sumForceLabel.setVisible(false);
-
 		}
-
 		if (massBox.isSelected() == true) {
 			massDisplay.setVisible(true);
 			String rounded = String.format("%.2f", object.getMass());
 			massDisplay.setText(rounded + " Kg");
 		} else {
 			massDisplay.setVisible(false);
-
 		}
 		if (speedBox.isSelected() == true) {
 			speedDisplay.setVisible(true);
@@ -536,12 +496,10 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 				angularSpeedDisplay.setVisible(true);
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularVelocity());
 				angularSpeedDisplay.setText(roundedAngular + " rad/s");
-			}
-			
+			}	
 		} else {
 			speedDisplay.setVisible(false);
 			angularSpeedDisplay.setVisible(false);
-
 		}
 		if (accelerationBox.isSelected() == true) {
 			accelerationDisplay.setVisible(true);
