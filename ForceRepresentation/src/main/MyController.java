@@ -192,7 +192,7 @@ public class MyController implements Initializable {
 		staticSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				if (staticSlider.getValue() >= kineticSlider.getValue()) {
+				if (staticSlider.getValue() <= kineticSlider.getValue()) {
 					staticSlider.adjustValue(kineticSlider.getValue());
 				}
 				surface.setStaticFrictionCoef((double) staticSlider.getValue());
@@ -204,7 +204,7 @@ public class MyController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				// TODO Auto-generated method stub
-				if (kineticSlider.getValue() <= staticSlider.getValue()) {
+				if (kineticSlider.getValue() >= staticSlider.getValue()) {
 					kineticSlider.adjustValue(staticSlider.getValue());
 				}
 				surface.setKineticFrictionCoef((double) kineticSlider.getValue());
@@ -563,6 +563,10 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
 		double old_x;
+		double oldAngularPos = 0;
+		if (obj instanceof Cylinder) {
+			oldAngularPos = ((Cylinder) obj).getAngularPosition();
+		}
 		old_x = obj.getX();
 		obj.proceed(elastedSecond);
 		if (ls1.getX() - (obj.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
@@ -587,9 +591,8 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 		}
 
 		if (obj instanceof Cylinder) {
-			//multiply by 25 because the rotation is faster than transition
-			horizontalLine.setRotate(horizontalLine.getRotate() + (obj.getX() - old_x)*20);
-			verticalLine.setRotate(verticalLine.getRotate() + (obj.getX() - old_x)*20);
+			horizontalLine.setRotate(horizontalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
+			verticalLine.setRotate(verticalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
 		}
 
 		if (obj.validateSpeedThreshold()) {
