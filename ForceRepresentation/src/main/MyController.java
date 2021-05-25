@@ -242,6 +242,7 @@ public class MyController implements Initializable {
 
 	@FXML
 	private void resetBtnPressed() {
+		frictionalArrow.setY(actorArrow.getY());
 		valuesBox.setSelected(false);
 		forcesBox.setSelected(false);
 		sumForcesBox.setSelected(false);
@@ -428,6 +429,13 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 				actorPane.setTranslateY(- (bgCube.getHeight() - 200)/2);
 				frictionPane.setTranslateY(- (bgCube.getHeight() - 200)/2  + 50);
 				
+				actorArrow.setScaleY(2*((Cube) object).getSideLength() / actorArrow.boundsInLocalProperty().get().getHeight());
+				frictionalArrow.setScaleY(2*((Cube) object).getSideLength() / actorArrow.boundsInLocalProperty().get().getHeight());
+				sumForceArrow.setScaleY(2*((Cube) object).getSideLength() / actorArrow.boundsInLocalProperty().get().getHeight());
+
+				
+				
+				
 			} else if (cylinderChosen == true) {
 				actorArrow.setTranslateY(- (bgCylinder.getRadius() - 100));
 				frictionalArrow.setTranslateY(- (bgCylinder.getRadius() - 100));
@@ -435,12 +443,17 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 
 				actorPane.setTranslateY(- (bgCylinder.getRadius() - 100));
 				frictionPane.setTranslateY(- (bgCylinder.getRadius() - 100) + 50);
+				
+				actorArrow.setScaleY(2*((Cylinder) object).getRadius() / actorArrow.boundsInLocalProperty().get().getHeight());
+				frictionalArrow.setScaleY(2*((Cylinder) object).getRadius() / frictionalArrow.boundsInLocalProperty().get().getHeight());
+				sumForceArrow.setScaleY(2*((Cylinder) object).getRadius() / sumForceArrow.boundsInLocalProperty().get().getHeight());
+
 			
 
 
 			}
 			String roundedActor = String.format("%.2f", Math.abs(object.getActorForceMagnitude()) );
-			actorForceLabel.setText(roundedActor);
+			actorForceLabel.setText(roundedActor + " N");
 			System.out.println(bgCube.getWidth());
 			System.out.println(bgCube.getHeight());
 
@@ -522,7 +535,7 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 			if (cylinderChosen == true) {
 				angularSpeedDisplay.setVisible(true);
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularVelocity());
-				angularSpeedDisplay.setText(roundedAngular + " m/s");
+				angularSpeedDisplay.setText(roundedAngular + " rad/s");
 			}
 			
 		} else {
@@ -537,7 +550,7 @@ public void frictionalscaling(double magnitude, ImageView arrow, Pane forcePane)
 			if (cylinderChosen == true) {
 				angularAccelerationDisplay.setVisible(true);
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularAcceleration());
-				angularAccelerationDisplay.setText(roundedAngular + " m/s");
+				angularAccelerationDisplay.setText(roundedAngular + " rad/s\u00b2");
 			}
 
 		} else {
