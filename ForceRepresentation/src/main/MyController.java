@@ -1,7 +1,6 @@
 package main;
 
 import force.ChangeableForce;
-import force.Force;
 import objects.*;
 
 import java.net.URL;
@@ -57,6 +56,8 @@ public class MyController implements Initializable {
 
 	private boolean cubeChosen = false;
 	private boolean cylinderChosen = false; 
+	private boolean choiceDraggable = true;
+	
 	@FXML
 	private Slider staticSlider;
 
@@ -245,33 +246,22 @@ public class MyController implements Initializable {
 		speedBox.setSelected(false);
 		accelerationBox.setSelected(false);
 
-
 		frictionPane.setVisible(false);
 		actorPane.setVisible(false);
 		sumForcePane.setVisible(false);
 
-
 		parallaxAnimation.stop();
 		obj = null;
 		display(obj);
-
-		//Why though
-		actorArrow.setVisible(false);
-		//normalArrow.setVisible(false);
-		//gravitationalArrow.setVisible(false);
-		frictionalArrow.setVisible(false);		
-		sumForceArrow.setVisible(false);
-		actorForceLabel.setVisible(false);
-		normalForceLabel.setVisible(false);
-		gravitationalForceLabel.setVisible(false);
-		frictionalForceLabel.setVisible(false);
-		sumForceLabel.setVisible(false);
 
 		bgCube.setVisible(false);
 		bgCylinder.setVisible(false);
 
 		choiceCube.setVisible(true);
 		choiceCylinder.setVisible(true);
+		cubeChosen = false;
+		cylinderChosen = false;
+		choiceDraggable = true;
 
 		horizontalLine.setRotate(0);
 		verticalLine.setRotate(0);
@@ -314,8 +304,10 @@ public class MyController implements Initializable {
 	}
 
 	public void cubeDragged(MouseEvent event) {
-		choiceCube.setTranslateX(event.getX() + choiceCube.getTranslateX() );
-		choiceCube.setTranslateY(event.getY() + choiceCube.getTranslateY() );
+		if (choiceDraggable) {
+			choiceCube.setTranslateX(event.getX() + choiceCube.getTranslateX() );
+			choiceCube.setTranslateY(event.getY() + choiceCube.getTranslateY() );
+		}
 	}
 
 	public void cubeReleased(MouseEvent event) {
@@ -327,16 +319,20 @@ public class MyController implements Initializable {
 		if (cubeChosen == true) {
 			choiceCylinder.setVisible( true);
 			choiceCube.setVisible(false);
+			choiceDraggable = false;
 		}
 		if (cylinderChosen == true) {
 			choiceCube.setVisible( true);
 			choiceCylinder.setVisible( false);
+			choiceDraggable = false;
 		}
 	}
 
 	public void cylinderDragged(MouseEvent event) {
-		choiceCylinder.setTranslateX(event.getX() + choiceCylinder.getTranslateX() );
-		choiceCylinder.setTranslateY(event.getY() + choiceCylinder.getTranslateY() );
+		if (choiceDraggable) {
+			choiceCylinder.setTranslateX(event.getX() + choiceCylinder.getTranslateX() );
+			choiceCylinder.setTranslateY(event.getY() + choiceCylinder.getTranslateY() );
+		}
 	}
 
 	public void cylinderReleased(MouseEvent event) {
@@ -348,10 +344,12 @@ public class MyController implements Initializable {
 		if (cubeChosen == true) {
 			choiceCylinder.setVisible( true);
 			choiceCube.setVisible(false);
+			choiceDraggable = false;
 		}
 		if (cylinderChosen == true) {
 			choiceCube.setVisible( true);
 			choiceCylinder.setVisible( false);
+			choiceDraggable = false;
 		}
 	}
 
@@ -497,6 +495,9 @@ public class MyController implements Initializable {
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularVelocity());
 				angularSpeedDisplay.setText(roundedAngular + " rad/s");
 			}	
+		} else {
+			speedDisplay.setVisible(false);
+			angularSpeedDisplay.setVisible(false);
 		}
 		if (accelerationBox.isSelected() == true) {
 			accelerationDisplay.setVisible(true);
@@ -507,7 +508,9 @@ public class MyController implements Initializable {
 				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularAcceleration());
 				angularAccelerationDisplay.setText(roundedAngular + " rad/s\u00b2");
 			}
-
+		} else {
+			accelerationDisplay.setVisible(false);
+			angularAccelerationDisplay.setVisible(false);
 		}
 	}
 
