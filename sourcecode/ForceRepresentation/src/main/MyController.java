@@ -516,12 +516,8 @@ public class MyController implements Initializable {
 
 	public void updateTransition(ActedObject obj, long elastedNanoSecond) {
 		double elastedSecond = elastedNanoSecond  / 1_000_000_000.0;
-		double old_x;
-		double oldAngularPos = 0;
-		if (obj instanceof Cylinder) {
-			oldAngularPos = ((Cylinder) obj).getAngularPosition();
-		}
-		old_x = obj.getX();
+		double old_x = obj.getX();
+		double oldAngularPos = obj.getAngularPosition();
 		obj.proceed(elastedSecond);
 		if (ls1.getX() - (obj.getX() - old_x)*40 < -BACKGROUND_WIDTH) {
 			ls1.setX(0);
