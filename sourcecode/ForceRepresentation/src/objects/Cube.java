@@ -51,4 +51,11 @@ public class Cube extends ActedObject {
 		this.updateForcesRoots();
 	}
 
+
+	@Override
+	public void updateAngularAcceleration() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

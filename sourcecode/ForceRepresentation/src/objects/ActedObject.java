@@ -6,8 +6,8 @@ import force.*;
 public abstract class ActedObject {
 
 	private double mass;
-	protected Force gravitationalForce;
-	protected Force normalForce;
+	protected NonChangeableForce gravitationalForce;
+	protected NonChangeableForce normalForce;
 	protected ChangeableForce actorForce;
 	protected ChangeableForce frictionalForce;
 	protected Surface surface;
@@ -16,7 +16,11 @@ public abstract class ActedObject {
 	private double velocity;
 	private final double MAX_SPEED = 60;
 	private double acceleration;
-
+	
+	protected double angularPosition;
+	protected double angularVelocity;
+	protected double angularAcceleration;
+	
 	
 	public double getMass() {
 		return mass;
@@ -38,6 +42,17 @@ public abstract class ActedObject {
 	}
 
 	
+	public double getAngularPosition() {
+		return angularPosition;
+	}
+	
+	public double getAngularVelocity() {
+		return angularVelocity;
+	}
+	
+	public double getAngularAcceleration() {
+		return angularAcceleration;
+	}
 	public ActedObject(double mass, double x, double y, ChangeableForce actorForce, Surface surface) throws InvalidInputException {
 		//(x,y) is the coordinates of the center of the object
 		//Must specify the actor force and the surface related to the object
@@ -48,8 +63,8 @@ public abstract class ActedObject {
 		this.mass = mass;
 		this.x = x;
 		this.y = y;
-		this.gravitationalForce = new Force(this.x, this.y, this.mass*10);
-		this.normalForce = new Force(this.x, this.y, this.gravitationalForce.getMagnitude());
+		this.gravitationalForce = new NonChangeableForce(this.x, this.y, this.mass*10);
+		this.normalForce = new NonChangeableForce(this.x, this.y, this.gravitationalForce.getMagnitude());
 		this.frictionalForce = new ChangeableForce(this.x, 0, 0);
 		this.actorForce = actorForce;
 		this.surface = surface;
@@ -105,6 +120,17 @@ public abstract class ActedObject {
 		this.normalForce.setRootX(this.x);
 		this.actorForce.setRootX(this.x);
 		this.frictionalForce.setRootX(this.x);
+	}
+	
+	//Method to update angular acceleration
+	public abstract void updateAngularAcceleration();
+	
+	public void updateAngularVelocity(double deltaT) {
+		this.angularVelocity = this.angularVelocity + this.angularAcceleration * deltaT;
+	}
+	
+	public void updateAngularPosition(double deltaT) {
+		this.angularPosition = this.angularPosition + this.angularVelocity * deltaT;
 	}
 	
 	//Method to update the state of the object after a time interval deltaT

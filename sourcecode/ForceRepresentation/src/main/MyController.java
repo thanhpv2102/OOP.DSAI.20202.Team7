@@ -492,7 +492,7 @@ public class MyController implements Initializable {
 			speedDisplay.setText(rounded + " m/s");
 			if (cylinderChosen == true) {
 				angularSpeedDisplay.setVisible(true);
-				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularVelocity());
+				String roundedAngular = String.format("%.2f", object.getAngularVelocity());
 				angularSpeedDisplay.setText(roundedAngular + " rad/s");
 			}	
 		} else {
@@ -505,7 +505,7 @@ public class MyController implements Initializable {
 			accelerationDisplay.setText(rounded + " m/s\u00b2");
 			if (cylinderChosen == true) {
 				angularAccelerationDisplay.setVisible(true);
-				String roundedAngular = String.format("%.2f", ((Cylinder) object).getAngularAcceleration());
+				String roundedAngular = String.format("%.2f",  object.getAngularAcceleration());
 				angularAccelerationDisplay.setText(roundedAngular + " rad/s\u00b2");
 			}
 		} else {
@@ -543,11 +543,10 @@ public class MyController implements Initializable {
 			bg1.setX(bg1.getX() - (obj.getX() - old_x)*10);
 			bg2.setX(bg2.getX() - (obj.getX() - old_x)*10);
 		}
+		
+		horizontalLine.setRotate(horizontalLine.getRotate() + ((obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
+		verticalLine.setRotate(verticalLine.getRotate() + ((obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
 
-		if (obj instanceof Cylinder) {
-			horizontalLine.setRotate(horizontalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
-			verticalLine.setRotate(verticalLine.getRotate() + (((Cylinder)obj).getAngularPosition() - oldAngularPos)*180/3.14*9);
-		}
 
 		if (obj.validateSpeedThreshold()) {
 			forceSlider.adjustValue(0.0);
