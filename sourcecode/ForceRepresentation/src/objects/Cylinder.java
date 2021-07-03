@@ -8,27 +8,12 @@ import exception.InvalidInputException;
 public class Cylinder extends ActedObject {
 	private double radius;
 	private static final double MAX_RADIUS = 30.0;
-	//Base direction: clock-wise
-	private double angularPosition;
-	private double angularVelocity;
-	private double angularAcceleration;
 	
 	
 	public double getRadius() {
 		return radius;
 	}
 
-	public double getAngularPosition() {
-		return angularPosition;
-	}
-
-	public double getAngularVelocity() {
-		return angularVelocity;
-	}
-
-	public double getAngularAcceleration() {
-		return angularAcceleration;
-	}
 	
 	public Cylinder(double mass, double radius, ChangeableForce actorForce, Surface surface) throws InvalidInputException {
 		super(mass, 0, radius, actorForce, surface);
@@ -59,18 +44,6 @@ public class Cylinder extends ActedObject {
 	}
 	
 	
-	//Update angular acceleration
-	public void updateAngularAcceleration() {
-		this.angularAcceleration = this.getAcceleration()/this.radius;
-	}
-	
-	public void updateAngularVelocity(double deltaT) {
-		this.angularVelocity = this.angularVelocity + this.angularAcceleration * deltaT;
-	}
-	
-	public void updateAngularPosition(double deltaT) {
-		this.angularPosition = this.angularPosition + this.angularVelocity * deltaT;
-	}
 	
 	public void proceed(double deltaT) {
 		this.validateSpeedThreshold();
@@ -82,6 +55,15 @@ public class Cylinder extends ActedObject {
 		this.updateVelocity(deltaT);
 		this.updateAngularVelocity(deltaT);
 		this.updateForcesRoots();
+	}
+
+
+	@Override
+	public void updateAngularAcceleration() {
+		// TODO Auto-generated method stub
+		this.angularAcceleration = this.getAcceleration()/this.radius;
+
+		
 	}
 	
 }

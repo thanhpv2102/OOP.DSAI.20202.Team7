@@ -1,5 +1,5 @@
 package force;
-public class Force {
+public abstract class Force {
 	//negative magnitude means opposite direction with the base direction of the force
 	protected double magnitude;
 	private double rootX;
